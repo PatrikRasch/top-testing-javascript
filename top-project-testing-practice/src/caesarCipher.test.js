@@ -3,7 +3,7 @@ import { caesarCipher } from "./caesarCipher.js";
 const str = "abc";
 const strWrap = "xyz";
 const strCase = "fGh";
-const strPunc = "Hello. It is me, Squidward!";
+const strPunc = "Hello. It is me, SquidwardZ!";
 
 test("Shifts a string one letter forwards", () => {
   expect(caesarCipher(str)).toMatch("bcd");
@@ -18,5 +18,5 @@ test("The same case is kept", () => {
 });
 
 test("Punctuation isn't shifted", () => {
-  expect(caesarCipher(strCase)).toMatch("gHi");
+  expect(caesarCipher(strPunc)).toMatch("Ifmmp. Ju jt nf, TrvjexbseA!");
 });
