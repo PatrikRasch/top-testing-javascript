@@ -10,6 +10,16 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/analyzeArray.js":
+/*!*****************************!*\
+  !*** ./src/analyzeArray.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"analyzeArray\": () => (/* binding */ analyzeArray)\n/* harmony export */ });\nconst arr = [3, 1, 7, 9, 20];\n\nconst analyzeArray = (arr) => {\n  let acc = 0;\n  let smallest = arr[0];\n  let biggest = arr[0];\n  arr.forEach((item) => {\n    if (item < smallest) smallest = item; // Finds smallest value\n    if (item > biggest) biggest = item; // Finds biggest value\n    acc += item;\n  });\n  const average = acc / arr.length; // Gets the average\n\n  const object = { average: average, min: smallest, max: biggest, length: arr.length };\n  console.table(object);\n  return object;\n};\n\nanalyzeArray(arr);\n\n\n\n\n//# sourceURL=webpack://top-project-testing-practice/./src/analyzeArray.js?");
+
+/***/ }),
+
 /***/ "./src/caesarCipher.js":
 /*!*****************************!*\
   !*** ./src/caesarCipher.js ***!
@@ -46,7 +56,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _capitalize_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./capitalize.js */ \"./src/capitalize.js\");\n/* harmony import */ var _reverseString_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./reverseString.js */ \"./src/reverseString.js\");\n/* harmony import */ var _calculator_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./calculator.js */ \"./src/calculator.js\");\n/* harmony import */ var _caesarCipher_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./caesarCipher.js */ \"./src/caesarCipher.js\");\n\n\n\n\n\n\n//# sourceURL=webpack://top-project-testing-practice/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _capitalize_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./capitalize.js */ \"./src/capitalize.js\");\n/* harmony import */ var _reverseString_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./reverseString.js */ \"./src/reverseString.js\");\n/* harmony import */ var _calculator_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./calculator.js */ \"./src/calculator.js\");\n/* harmony import */ var _caesarCipher_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./caesarCipher.js */ \"./src/caesarCipher.js\");\n/* harmony import */ var _analyzeArray_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./analyzeArray.js */ \"./src/analyzeArray.js\");\n\n\n\n\n\n\n\n//# sourceURL=webpack://top-project-testing-practice/./src/index.js?");
 
 /***/ }),
 
