@@ -1,4 +1,3 @@
-// import { shipFactory } from "./shipFactory";
 import { shipHit } from "../shipHit";
 import { isSunk } from "../isSunk.js";
 
