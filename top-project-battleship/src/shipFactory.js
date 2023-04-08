@@ -1,14 +1,14 @@
 const shipArray = [];
 let lastId = 1;
 
-const shipFactory = (coord, orientation, length, hits, sunk) => {
+const shipFactory = (length, hits, sunk) => {
   const ship = {
-    coord: coord,
-    orientation: orientation,
     id: lastId++,
     length: length,
     hits: hits,
     sunk: sunk,
+    coord: "",
+    orientation: "",
   };
   shipArray.push(ship);
   return ship;

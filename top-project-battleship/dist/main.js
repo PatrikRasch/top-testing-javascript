@@ -10,33 +10,13 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/findShip.js":
-/*!*************************!*\
-  !*** ./src/findShip.js ***!
-  \*************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"findShip\": () => (/* binding */ findShip)\n/* harmony export */ });\nvar findShip = function findShip(shipArray, id) {\n  var ship = shipArray.find(function (element) {\n    return element.id === id;\n  });\n  return ship || false;\n};\n\n\n//# sourceURL=webpack://top-project-battleship/./src/findShip.js?");
-
-/***/ }),
-
 /***/ "./src/gameboardFactory.js":
 /*!*********************************!*\
   !*** ./src/gameboardFactory.js ***!
   \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"gameboardFactory\": () => (/* binding */ gameboardFactory)\n/* harmony export */ });\nvar gameboardFactory = function gameboardFactory(squares) {\n  var gameboardArray = Array.from({\n    length: squares * squares\n  }, function (_, index) {\n    var row = Math.floor(index / squares);\n    var column = index % squares + 1;\n    return {\n      coord: \"\".concat(row, \".\").concat(column),\n      containsShip: false\n    };\n  });\n  return gameboardArray;\n};\n\n\n// * If ship is placed on board, add key-value pair to board piece\n\n//# sourceURL=webpack://top-project-battleship/./src/gameboardFactory.js?");
-
-/***/ }),
-
-/***/ "./src/gameplay.js":
-/*!*************************!*\
-  !*** ./src/gameplay.js ***!
-  \*************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _shipFactory_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shipFactory.js */ \"./src/shipFactory.js\");\n/* harmony import */ var _shipHit_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shipHit.js */ \"./src/shipHit.js\");\n/* harmony import */ var _isSunk_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./isSunk.js */ \"./src/isSunk.js\");\n/* harmony import */ var _gameboardFactory_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./gameboardFactory.js */ \"./src/gameboardFactory.js\");\n/* harmony import */ var _receiveAttack_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./receiveAttack.js */ \"./src/receiveAttack.js\");\n/* harmony import */ var _findShip_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./findShip.js */ \"./src/findShip.js\");\n\n\n\n\n\n\nvar gameboard1 = (0,_gameboardFactory_js__WEBPACK_IMPORTED_MODULE_3__.gameboardFactory)(8);\nvar gameboard2 = (0,_gameboardFactory_js__WEBPACK_IMPORTED_MODULE_3__.gameboardFactory)(8);\nvar ship1 = (0,_shipFactory_js__WEBPACK_IMPORTED_MODULE_0__.shipFactory)(\"4.4\", \"vertical\", 3, 0, false);\nvar ship2 = (0,_shipFactory_js__WEBPACK_IMPORTED_MODULE_0__.shipFactory)(\"2.2\", \"horizontal\", 3, 0, false);\nvar firstAttack = (0,_receiveAttack_js__WEBPACK_IMPORTED_MODULE_4__.receiveAttack)(gameboard1, \"2.2\");\nconsole.log(firstAttack);\n\n//# sourceURL=webpack://top-project-battleship/./src/gameplay.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"gameboardFactory\": () => (/* binding */ gameboardFactory)\n/* harmony export */ });\nvar gameboardFactory = function gameboardFactory(squares) {\n  var gameboardArray = Array.from({\n    length: squares * squares\n  }, function (_, index) {\n    var row = Math.floor(index / squares);\n    var column = index % squares + 1;\n    return {\n      coord: \"\".concat(row, \".\").concat(column),\n      containsShip: false\n    };\n  });\n  return gameboardArray;\n};\n\n\n//# sourceURL=webpack://top-project-battleship/./src/gameboardFactory.js?");
 
 /***/ }),
 
@@ -46,27 +26,27 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _shi
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _gameplay_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameplay.js */ \"./src/gameplay.js\");\n\n// import { gameboardFactory } from \"./gameboardFactory\";\n// import { receiveAttack } from \"./receiveAttack\";\n\n// const gameboard = gameboardFactory(10);\n\n// const bro = receiveAttack(gameboard, \"1.1\");\n\n// console.log(bro);\n// console.log(gameplay);\n\n//# sourceURL=webpack://top-project-battleship/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _instances_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./instances.js */ \"./src/instances.js\");\n/* harmony import */ var _placeShip_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./placeShip.js */ \"./src/placeShip.js\");\n// import { gameplay } from \"./gameplay.js\";\n\n\n(0,_placeShip_js__WEBPACK_IMPORTED_MODULE_1__.placeShip)(_instances_js__WEBPACK_IMPORTED_MODULE_0__.testShip, _instances_js__WEBPACK_IMPORTED_MODULE_0__.gameboardFullShipHorizontal, \"1.1\", \"horizontal\");\n(0,_placeShip_js__WEBPACK_IMPORTED_MODULE_1__.placeShip)(_instances_js__WEBPACK_IMPORTED_MODULE_0__.testShip, _instances_js__WEBPACK_IMPORTED_MODULE_0__.gameboardFullShipVertical, \"1.1\", \"vertical\");\n\n//# sourceURL=webpack://top-project-battleship/./src/index.js?");
 
 /***/ }),
 
-/***/ "./src/isSunk.js":
-/*!***********************!*\
-  !*** ./src/isSunk.js ***!
-  \***********************/
+/***/ "./src/instances.js":
+/*!**************************!*\
+  !*** ./src/instances.js ***!
+  \**************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"isSunk\": () => (/* binding */ isSunk)\n/* harmony export */ });\nvar isSunk = function isSunk(ship) {\n  if (ship.hits === ship.length) {\n    ship.sunk = true;\n    return ship;\n  }\n};\n\n\n//# sourceURL=webpack://top-project-battleship/./src/isSunk.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"gameboardClean\": () => (/* binding */ gameboardClean),\n/* harmony export */   \"gameboardFullShipHorizontal\": () => (/* binding */ gameboardFullShipHorizontal),\n/* harmony export */   \"gameboardFullShipVertical\": () => (/* binding */ gameboardFullShipVertical),\n/* harmony export */   \"gameboardOneSquare\": () => (/* binding */ gameboardOneSquare),\n/* harmony export */   \"testShip\": () => (/* binding */ testShip),\n/* harmony export */   \"testShipOneFromSunk\": () => (/* binding */ testShipOneFromSunk)\n/* harmony export */ });\n/* harmony import */ var _shipFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shipFactory */ \"./src/shipFactory.js\");\n/* harmony import */ var _gameboardFactory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./gameboardFactory */ \"./src/gameboardFactory.js\");\n\n\n\n// * testShip has a length of 3 and has taken 0 hits.\nvar testShip = (0,_shipFactory__WEBPACK_IMPORTED_MODULE_0__.shipFactory)(3, 0, false);\n\n// * testShipOneFromSunk has a length of 3 and has taken 2 hits already.\nvar testShipOneFromSunk = (0,_shipFactory__WEBPACK_IMPORTED_MODULE_0__.shipFactory)(3, 2, false);\n\n// * gameboardClean has no ships on it\nvar gameboardClean = (0,_gameboardFactory__WEBPACK_IMPORTED_MODULE_1__.gameboardFactory)(8);\n\n// * gameboardOneSquare only has a 1x1 ship on it, on coord \"1.1\"\nvar gameboardOneSquare = (0,_gameboardFactory__WEBPACK_IMPORTED_MODULE_1__.gameboardFactory)(8);\nvar gameboardElement = gameboardOneSquare.find(function (element) {\n  return element.coord === \"1.1\";\n});\ngameboardElement.containsShip = testShip.id;\n\n// * gameboardFullShipHorizontal has a 1x3 ship on it, on coord \"1.1\", \"1.2\" and \"1.3\"\nvar gameboardFullShipHorizontal = (0,_gameboardFactory__WEBPACK_IMPORTED_MODULE_1__.gameboardFactory)(8);\n// Populate gameboard with testship's full length to test placeShip\nvar element1 = gameboardFullShipHorizontal.find(function (element) {\n  return element.coord === \"1.1\";\n});\nelement1.containsShip = testShip.id;\nvar element2 = gameboardFullShipHorizontal.find(function (element) {\n  return element.coord === \"1.2\";\n});\nelement2.containsShip = testShip.id;\nvar element3 = gameboardFullShipHorizontal.find(function (element) {\n  return element.coord === \"1.3\";\n});\nelement3.containsShip = testShip.id;\n\n// * gameboardFullShipVertical has a 1x3 ship on it, on coord \"1.1\", \"2.1\" and \"3.1\"\nvar gameboardFullShipVertical = (0,_gameboardFactory__WEBPACK_IMPORTED_MODULE_1__.gameboardFactory)(8);\n// Populate gameboard with testship's full length to test placeShip\nvar element4 = gameboardFullShipVertical.find(function (element) {\n  return element.coord === \"1.1\";\n});\nelement4.containsShip = testShip.id;\nvar element5 = gameboardFullShipVertical.find(function (element) {\n  return element.coord === \"2.1\";\n});\nelement5.containsShip = testShip.id;\nvar element6 = gameboardFullShipVertical.find(function (element) {\n  return element.coord === \"3.1\";\n});\nelement6.containsShip = testShip.id;\n\n\n//# sourceURL=webpack://top-project-battleship/./src/instances.js?");
 
 /***/ }),
 
-/***/ "./src/receiveAttack.js":
-/*!******************************!*\
-  !*** ./src/receiveAttack.js ***!
-  \******************************/
+/***/ "./src/placeShip.js":
+/*!**************************!*\
+  !*** ./src/placeShip.js ***!
+  \**************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"receiveAttack\": () => (/* binding */ receiveAttack)\n/* harmony export */ });\nvar receiveAttack = function receiveAttack(gameboard, coord) {\n  var arrayItem = gameboard.find(function (element) {\n    return element.coord === coord;\n  }); // Finds the item that matches the hit coordinates\n  return arrayItem.containsShip; // Returns either false if no ship, or the ship's id\n};\n\n\n\n//# sourceURL=webpack://top-project-battleship/./src/receiveAttack.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"placeShip\": () => (/* binding */ placeShip)\n/* harmony export */ });\nfunction _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.\"); }\nfunction _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === \"string\") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === \"Object\" && o.constructor) n = o.constructor.name; if (n === \"Map\" || n === \"Set\") return Array.from(o); if (n === \"Arguments\" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }\nfunction _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }\nfunction _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : \"undefined\" != typeof Symbol && arr[Symbol.iterator] || arr[\"@@iterator\"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i[\"return\"] && (_r = _i[\"return\"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\nvar findElementToMark = function findElementToMark(gameboard, coord) {\n  return gameboard.find(function (element) {\n    return element.coord === coord;\n  });\n};\nvar placeShip = function placeShip(ship, gameboard, coord, orientation) {\n  if (orientation !== \"horizontal\" && orientation !== \"vertical\") {\n    return undefined; // If orientation error\n  }\n\n  var _coord$split$map = coord.split(\".\").map(Number),\n    _coord$split$map2 = _slicedToArray(_coord$split$map, 2),\n    startY = _coord$split$map2[0],\n    startX = _coord$split$map2[1]; // Make the coordinates into numbers in an array\n  var squaresToMark = ship.length; // Define how many squares are to be taken up by the ship\n  while (squaresToMark > 0) {\n    if (orientation === \"horizontal\") {\n      var coordinateToFindX = \"\".concat(startY, \".\").concat(startX + --squaresToMark);\n      var elementToMark = findElementToMark(gameboard, coordinateToFindX);\n      elementToMark.containsShip = ship.id;\n    }\n    if (orientation === \"vertical\") {\n      var coordinateToFindY = \"\".concat(startY + --squaresToMark, \".\").concat(startX);\n      var _elementToMark = findElementToMark(gameboard, coordinateToFindY);\n      _elementToMark.containsShip = ship.id;\n    }\n  }\n  return gameboard;\n};\n\n\n//# sourceURL=webpack://top-project-battleship/./src/placeShip.js?");
 
 /***/ }),
 
@@ -76,17 +56,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"shipArray\": () => (/* binding */ shipArray),\n/* harmony export */   \"shipFactory\": () => (/* binding */ shipFactory)\n/* harmony export */ });\nvar shipArray = [];\nvar lastId = 1;\nvar shipFactory = function shipFactory(coord, orientation, length, hits, sunk) {\n  var ship = {\n    coord: coord,\n    orientation: orientation,\n    id: lastId++,\n    length: length,\n    hits: hits,\n    sunk: sunk\n  };\n  shipArray.push(ship);\n  return ship;\n};\n\n\n//# sourceURL=webpack://top-project-battleship/./src/shipFactory.js?");
-
-/***/ }),
-
-/***/ "./src/shipHit.js":
-/*!************************!*\
-  !*** ./src/shipHit.js ***!
-  \************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"shipHit\": () => (/* binding */ shipHit)\n/* harmony export */ });\nvar shipHit = function shipHit(ship) {\n  ship.hits += 1;\n  return ship;\n};\n\n\n//# sourceURL=webpack://top-project-battleship/./src/shipHit.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"shipArray\": () => (/* binding */ shipArray),\n/* harmony export */   \"shipFactory\": () => (/* binding */ shipFactory)\n/* harmony export */ });\nvar shipArray = [];\nvar lastId = 1;\nvar shipFactory = function shipFactory(length, hits, sunk) {\n  var ship = {\n    id: lastId++,\n    length: length,\n    hits: hits,\n    sunk: sunk,\n    coord: \"\",\n    orientation: \"\"\n  };\n  shipArray.push(ship);\n  return ship;\n};\n\n\n//# sourceURL=webpack://top-project-battleship/./src/shipFactory.js?");
 
 /***/ })
 

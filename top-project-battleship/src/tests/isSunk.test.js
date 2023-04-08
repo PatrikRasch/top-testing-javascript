@@ -1,9 +1,9 @@
 import { shipHit } from "../shipHit";
 import { isSunk } from "../isSunk.js";
+import { testShipOneFromSunk } from "../instances";
 
-const testShip = { length: 3, hits: 2, sunk: false };
-shipHit(testShip);
+shipHit(testShipOneFromSunk);
 
 it("Sinks the ship", () => {
-  expect(isSunk(testShip)).toEqual({ length: 3, hits: 3, sunk: true });
+  expect(isSunk(testShipOneFromSunk)).toEqual({ id: 2, length: 3, hits: 3, sunk: true, coord: "", orientation: "" });
 });
