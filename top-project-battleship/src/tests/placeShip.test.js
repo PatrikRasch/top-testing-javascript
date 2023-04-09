@@ -4,6 +4,7 @@ import { gameboardClean, gameboardFullShipHorizontal, gameboardFullShipVertical,
 beforeEach(() => {
   gameboardClean.forEach((element) => {
     element.containsShip = false;
+    element.cellHit = false;
   });
 });
 

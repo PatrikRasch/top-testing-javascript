@@ -35,11 +35,25 @@ element5.containsShip = testShip.id;
 const element6 = gameboardFullShipVertical.find((element) => element.coord === "3.1");
 element6.containsShip = testShip.id;
 
+// * gameboardFullShipVerticalAllHit has a 1x3 ship on it, on coord "1.1", "2.1" and "3.1", which have all been hit
+const gameboardFullShipVerticalAllHit = gameboardFactory(8);
+// Populate gameboard with testship's full length to test placeShip
+const element7 = gameboardFullShipVerticalAllHit.find((element) => element.coord === "1.1");
+element7.containsShip = testShip.id;
+element7.cellHit = true;
+const element8 = gameboardFullShipVerticalAllHit.find((element) => element.coord === "2.1");
+element8.containsShip = testShip.id;
+element8.cellHit = true;
+const element9 = gameboardFullShipVerticalAllHit.find((element) => element.coord === "3.1");
+element9.containsShip = testShip.id;
+element9.cellHit = true;
+
 export {
   gameboardClean,
   gameboardOneSquare,
   gameboardFullShipHorizontal,
   gameboardFullShipVertical,
+  gameboardFullShipVerticalAllHit,
   testShip,
   testShipOneFromSunk,
 };
