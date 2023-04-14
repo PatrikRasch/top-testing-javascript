@@ -4,16 +4,38 @@ import { isSunk } from "./isSunk.js";
 import { gameboardFactory } from "./gameboardFactory.js";
 import { receiveAttack } from "./receiveAttack.js";
 import { findShip } from "./findShip.js";
+import { allShipsSunk } from "./allShipsSunk.js";
+import { placeShip } from "./placeShip.js";
+import { playerFactory } from "./playerFactory.js";
 
-const gameboard1 = gameboardFactory(8);
-const gameboard2 = gameboardFactory(8);
+// * Formatting for function calls
+// placeShip(ship, gameboard, coord, orientation)
+// receiveAttack(gameboard, coord);
 
-// const ship1 = shipFactory(3, 0, false);
-// const ship2 = shipFactory(3, 0, false);
+const gameboardHuman = gameboardFactory(10);
+const gameboardComputer = gameboardFactory(10);
 
-console.log(gameboard1);
+const shipHuman1 = shipFactory(3, 0, false);
+const shipHuman2 = shipFactory(2, 0, false);
+const shipHuman3 = shipFactory(1, 0, false);
 
-// placeShip(ship, gameboard, coord, orientation);
+const shipHumanComputer1 = shipFactory(3, 0, false);
+const shipHumanComputer2 = shipFactory(2, 0, false);
+const shipHumanComputer3 = shipFactory(1, 0, false);
 
-const firstAttack = receiveAttack(gameboard1, "2.2");
-console.log(firstAttack);
+const playerHuman = playerFactory("Svein-Egil");
+const playerComputer = playerFactory("Computer");
+
+placeShip(shipHuman1, gameboardHuman, "1.1", "horizontal");
+placeShip(shipHuman2, gameboardHuman, "3.3", "vertical");
+placeShip(shipHuman3, gameboardHuman, "5.5", "horizontal");
+
+placeShip(shipHumanComputer1, gameboardComputer, "1.1", "horizontal");
+placeShip(shipHumanComputer2, gameboardComputer, "3.3", "vertical");
+placeShip(shipHumanComputer3, gameboardComputer, "5.5", "horizontal");
+
+const game = () => {};
+
+game();
+
+export { gameboardHuman, gameboardComputer };
