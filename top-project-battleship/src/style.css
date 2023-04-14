@@ -68,6 +68,14 @@ body {
 .hits-taken {
   font-size: 24px;
   font-family: Assistant;
+  display: flex;
+}
+
+.ships-left-player-value,
+.ships-left-computer-value,
+.hits-taken-player-value,
+.hits-taken-computer-value {
+  margin-left: 8px;
 }
 
 .shipOnSquare {
