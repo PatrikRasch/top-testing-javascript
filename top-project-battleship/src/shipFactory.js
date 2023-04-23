@@ -1,5 +1,5 @@
-const shipArrayUser1 = [];
-const shipArrayUser2 = [];
+const shipArrayPlayer1 = [];
+const shipArrayPlayer2 = [];
 let lastId = 1;
 
 const shipFactory = (length, hits, sunk, player) => {
@@ -12,9 +12,9 @@ const shipFactory = (length, hits, sunk, player) => {
     coord: "",
     orientation: "",
   };
-  if (player === 1) shipArrayUser1.push(ship);
-  if (player === 2) shipArrayUser2.push(ship);
+  if (player === 1) shipArrayPlayer1.push(ship);
+  if (player === 2) shipArrayPlayer2.push(ship);
   return ship;
 };
 
-export { shipFactory, shipArrayUser1, shipArrayUser2 };
+export { shipFactory, shipArrayPlayer1, shipArrayPlayer2 };

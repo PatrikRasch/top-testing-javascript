@@ -54,7 +54,6 @@ body {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   min-width: 100px;
-  background-color: rgb(144, 159, 126);
 }
 
 .cell {
@@ -62,6 +61,7 @@ body {
   min-width: 10px;
   padding-top: 100%;
   border: 0.5px solid rgb(39, 88, 100);
+  background-color: gray;
 }
 
 .ships-left,
@@ -80,4 +80,21 @@ body {
 
 .shipOnSquare {
   background-color: #1b8f79;
+}
+
+.cell:hover {
+  opacity: 0.9;
+}
+
+.cell-hit,
+.ship-hit {
+  cursor: not-allowed;
+}
+
+.cell-hit {
+  background-color: orange;
+}
+
+.ship-hit {
+  background-color: red;
 }

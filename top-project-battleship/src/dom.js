@@ -1,34 +1,26 @@
-import { gameboardHuman, gameboardComputer, shipArrayUser1, shipArrayUser2 } from "./gameplay";
+import { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2 } from "./gameplay";
 
 const headerTitle = document.querySelector(".header-title");
 
-const playerShips = document.querySelector(".player-ships");
-const computerShips = document.querySelector(".computer-ships");
+const player1ships = document.querySelector(".player-ships");
+const player2ships = document.querySelector(".computer-ships");
 
-const playerGameboard = document.querySelector(".player-gameboard");
-const computerGameboard = document.querySelector(".computer-gameboard");
+const player1gameboardDom = document.querySelector(".player-gameboard");
+const player2gameboardDom = document.querySelector(".computer-gameboard");
 
-const shipsLeftPlayer = document.querySelector(".ships-left-player-value");
-const shipsLeftComputer = document.querySelector(".ships-left-computer-value");
+const shipsLeftPlayer1 = document.querySelector(".ships-left-player-value");
+const shipsLeftPlayer2 = document.querySelector(".ships-left-computer-value");
 
-const hitsTakenPlayer = document.querySelector(".hits-taken-player-value");
-const hitsTakenComputer = document.querySelector(".hits-taken-computer-value");
+const hitsTakenPlayer1 = document.querySelector(".hits-taken-player-value");
+const hitsTakenPlayer2 = document.querySelector(".hits-taken-computer-value");
 
 const renderGameboard = (gameboard, numOfSquares) => {
   for (let i = 0; i < numOfSquares; i++) {
     const cell = document.createElement("div");
     cell.classList.add("cell");
-    cell.dataset.coord = gameboardHuman[i].coord;
+    cell.dataset.coord = player1gameboard[i].coord;
     gameboard.appendChild(cell);
   }
-};
-
-const updateHits = (array, hitsTaken) => {
-  let hitCount = 0;
-  array.forEach((element) => {
-    hitCount += element.hits;
-  });
-  hitsTaken.textContent = hitCount;
 };
 
 const updateShipsLeft = (array, shipsLeft) => {
@@ -39,11 +31,11 @@ const updateShipsLeft = (array, shipsLeft) => {
   shipsLeft.textContent = shipsCount;
 };
 
-updateHits(shipArrayUser1, hitsTakenPlayer);
-updateShipsLeft(shipArrayUser1, shipsLeftPlayer);
+let hitsTakenPlayer1value = 0;
+let hitsTakenPlayer2value = 0;
 
-updateHits(shipArrayUser2, hitsTakenComputer);
-updateShipsLeft(shipArrayUser2, shipsLeftComputer);
+updateShipsLeft(shipArrayPlayer1, shipsLeftPlayer1);
+updateShipsLeft(shipArrayPlayer2, shipsLeftPlayer2);
 
 const markShipsOnGameboard = (gameboard, gameboardDom) => {
   gameboard.forEach((element) => {
@@ -54,10 +46,43 @@ const markShipsOnGameboard = (gameboard, gameboardDom) => {
   });
 };
 
-// TODO - Loop over gameboard in order to check which one's contains ships.
-// TODO - If it contains a ship and is your own, add a class which adds colour.
+// const registerHit = (gameboard, cell) => {
+//   const cellInArray = gameboard.find((element) => {
+//     return element.coord === cell.dataset.coord;
+//   });
+//   if (cellInArray.cellHit === true) return false;
+//   cellInArray.cellHit = true;
+//   if (cell.classList.contains("shipOnSquare")) {
+//     cell.classList.add("ship-hit");
+//     return true;
+//   }
+//   if (!cell.classList.contains("shipOnSquare")) {
+//     cell.classList.add("cell-hit");
+//     return false;
+//   }
+// };
 
-renderGameboard(playerGameboard, gameboardHuman.length);
-renderGameboard(computerGameboard, gameboardHuman.length);
-markShipsOnGameboard(gameboardHuman, playerGameboard);
-markShipsOnGameboard(gameboardComputer, computerGameboard);
+player1gameboardDom.addEventListener("attacked", (e) => {
+  // const isHit = registerHit(player1gameboard, e.detail.target);
+  // if (isHit === true) {
+  //   hitsTakenPlayer1value += 1;
+  //   hitsTakenPlayer1.textContent = hitsTakenPlayer1value;
+  //   updateShipsLeft(shipArrayPlayer1, shipsLeftPlayer1);
+  // }
+});
+
+player2gameboardDom.addEventListener("attacked", (e) => {
+  // const isHit = registerHit(player2gameboard, e.detail.target);
+  // if (isHit === true) {
+  //   hitsTakenPlayer2value += 1;
+  //   hitsTakenPlayer2.textContent = hitsTakenPlayer2value;
+  //   updateShipsLeft(shipArrayPlayer2, shipsLeftPlayer2);
+  // }
+});
+
+renderGameboard(player1gameboardDom, player1gameboard.length);
+renderGameboard(player2gameboardDom, player1gameboard.length);
+markShipsOnGameboard(player1gameboard, player1gameboardDom);
+markShipsOnGameboard(player2gameboard, player2gameboardDom);
+
+export {};

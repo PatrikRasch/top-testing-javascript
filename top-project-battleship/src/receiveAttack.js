@@ -1,5 +1,6 @@
 const receiveAttack = (gameboard, coord) => {
   const arrayItem = gameboard.find((element) => element.coord === coord); // Finds the item that matches the hit coordinates
+  if (arrayItem.cellHit === true) return false;
   arrayItem.cellHit = true; // Register on the board that it has been hit
   return arrayItem.containsShip; // Returns either false if no ship, or the ship's id
 };
