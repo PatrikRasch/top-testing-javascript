@@ -23,20 +23,6 @@ const renderGameboard = (gameboard, numOfSquares) => {
   }
 };
 
-const updateShipsLeft = (array, shipsLeft) => {
-  let shipsCount = array.length;
-  array.forEach((element) => {
-    if (element.sunk === true) shipsCount -= 1;
-  });
-  shipsLeft.textContent = shipsCount;
-};
-
-let hitsTakenPlayer1value = 0;
-let hitsTakenPlayer2value = 0;
-
-updateShipsLeft(shipArrayPlayer1, shipsLeftPlayer1);
-updateShipsLeft(shipArrayPlayer2, shipsLeftPlayer2);
-
 const markShipsOnGameboard = (gameboard, gameboardDom) => {
   gameboard.forEach((element) => {
     if (element.containsShip !== false) {
@@ -45,6 +31,49 @@ const markShipsOnGameboard = (gameboard, gameboardDom) => {
     }
   });
 };
+
+renderGameboard(player1gameboardDom, player1gameboard.length);
+renderGameboard(player2gameboardDom, player1gameboard.length);
+markShipsOnGameboard(player1gameboard, player1gameboardDom);
+markShipsOnGameboard(player2gameboard, player2gameboardDom);
+
+let hitsTakenPlayer1value = { value: 0 };
+let hitsTakenPlayer2value = { value: 0 };
+
+let shipsLeftPlayer1value = { value: shipArrayPlayer1.length };
+let shipsLeftPlayer2value = { value: shipArrayPlayer2.length };
+
+shipsLeftPlayer1.textContent = shipsLeftPlayer1value.value;
+shipsLeftPlayer2.textContent = shipsLeftPlayer2value.value;
+
+const updatePlayerDom = (cell, hitsTakenPlayer, hitsTakenPlayerValue) => {
+  if (cell.classList.contains("shipOnSquare") && !cell.classList.contains("ship-hit")) {
+    cell.classList.add("ship-hit");
+    hitsTakenPlayerValue.value += 1;
+    hitsTakenPlayer.textContent = hitsTakenPlayerValue.value;
+  } else cell.classList.add("cell-hit");
+};
+
+const updateShipsLeftDom = (shipsLeftPlayer, shipsLeftPlayerValue) => {
+  shipsLeftPlayerValue.value -= 1;
+  shipsLeftPlayer.textContent = shipsLeftPlayerValue.value;
+};
+
+player1gameboardDom.addEventListener("registerHit", (e) => {
+  updatePlayerDom(e.detail.target, hitsTakenPlayer1, hitsTakenPlayer1value);
+});
+player1gameboardDom.addEventListener("registerShipSunk", (e) => {
+  updateShipsLeftDom(shipsLeftPlayer1, shipsLeftPlayer1value);
+});
+
+player2gameboardDom.addEventListener("registerHit", (e) => {
+  updatePlayerDom(e.detail.target, hitsTakenPlayer2, hitsTakenPlayer2value);
+});
+player2gameboardDom.addEventListener("registerShipSunk", (e) => {
+  updateShipsLeftDom(shipsLeftPlayer2, shipsLeftPlayer2value);
+});
+
+export {};
 
 // const registerHit = (gameboard, cell) => {
 //   const cellInArray = gameboard.find((element) => {
@@ -62,27 +91,20 @@ const markShipsOnGameboard = (gameboard, gameboardDom) => {
 //   }
 // };
 
-player1gameboardDom.addEventListener("attacked", (e) => {
-  // const isHit = registerHit(player1gameboard, e.detail.target);
-  // if (isHit === true) {
-  //   hitsTakenPlayer1value += 1;
-  //   hitsTakenPlayer1.textContent = hitsTakenPlayer1value;
-  //   updateShipsLeft(shipArrayPlayer1, shipsLeftPlayer1);
-  // }
-});
+// player1gameboardDom.addEventListener("attacked", (e) => {
+// const isHit = registerHit(player1gameboard, e.detail.target);
+// if (isHit === true) {
+//   hitsTakenPlayer1value += 1;
+//   hitsTakenPlayer1.textContent = hitsTakenPlayer1value;
+//   updateShipsLeft(shipArrayPlayer1, shipsLeftPlayer1);
+// }
+// });
 
-player2gameboardDom.addEventListener("attacked", (e) => {
-  // const isHit = registerHit(player2gameboard, e.detail.target);
-  // if (isHit === true) {
-  //   hitsTakenPlayer2value += 1;
-  //   hitsTakenPlayer2.textContent = hitsTakenPlayer2value;
-  //   updateShipsLeft(shipArrayPlayer2, shipsLeftPlayer2);
-  // }
-});
-
-renderGameboard(player1gameboardDom, player1gameboard.length);
-renderGameboard(player2gameboardDom, player1gameboard.length);
-markShipsOnGameboard(player1gameboard, player1gameboardDom);
-markShipsOnGameboard(player2gameboard, player2gameboardDom);
-
-export {};
+// player2gameboardDom.addEventListener("attacked", (e) => {
+// const isHit = registerHit(player2gameboard, e.detail.target);
+// if (isHit === true) {
+//   hitsTakenPlayer2value += 1;
+//   hitsTakenPlayer2.textContent = hitsTakenPlayer2value;
+//   updateShipsLeft(shipArrayPlayer2, shipsLeftPlayer2);
+// }
+// });
