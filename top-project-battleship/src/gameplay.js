@@ -31,17 +31,40 @@ const player2ship3 = shipFactory(1, 0, false, 2);
 // const player1 = playerFactory("Svein-Egil");
 // const player2 = playerFactory("Computer");
 
-// placeShip(player1ship1, player1gameboard, "1.1", "horizontal");
-// placeShip(player1ship2, player1gameboard, "3.3", "vertical");
+placeShip(player1ship1, player1gameboard, "1.1", "horizontal");
+placeShip(player1ship2, player1gameboard, "3.3", "vertical");
 placeShip(player1ship3, player1gameboard, "5.5", "horizontal");
 
-// placeShip(player2ship1, player2gameboard, "1.1", "horizontal");
-// placeShip(player2ship2, player2gameboard, "3.3", "vertical");
+placeShip(player2ship1, player2gameboard, "1.1", "horizontal");
+placeShip(player2ship2, player2gameboard, "3.3", "vertical");
 placeShip(player2ship3, player2gameboard, "5.5", "horizontal");
 
 let isPlayer1Turn = { value: false };
 
+const AI = (playerGameboardDom, playerGameboard) => {
+  const playerGameboardDomArray = [...playerGameboardDom.children];
+  let randomNumber = Math.floor(100 * Math.random());
+  while (playerGameboard[randomNumber].cellHit === true) {
+    randomNumber = Math.floor(100 * Math.random());
+  }
+  const attackTime = Math.floor(500 * Math.random()) + 250;
+  setTimeout(() => {
+    playerGameboardDomArray[randomNumber].click();
+    // if (playerGameboard[randomNumber].containsShip !== false) {
+    //   let target = playerGameboard[randomNumber].coord;
+    //   const splitTarget = target.split(".");
+    //   const targetArray = [Number(splitTarget[0]), Number(splitTarget[1])];
+    //   const newTargetArray = [targetArray[0], targetArray[1] + 1];
+    //   const newTarget = newTargetArray[0].toString() + "," + newTargetArray[1].toString();
+    // }
+  }, attackTime);
+};
+
 const game = (playerGameboardDom, playerGameboard, shipArray) => {
+  if (isPlayer1Turn.value === true) {
+    AI(playerGameboardDom, playerGameboard);
+  }
+
   const handleAttack = (e) => {
     const hitOrMiss = receiveAttack(playerGameboard, e.target.dataset.coord);
     const registerHitEvent = new CustomEvent("registerHit", { detail: { target: e.target } });
