@@ -14,6 +14,42 @@ const shipsLeftPlayer2 = document.querySelector(".ships-left-computer-value");
 const hitsTakenPlayer1 = document.querySelector(".hits-taken-player-value");
 const hitsTakenPlayer2 = document.querySelector(".hits-taken-computer-value");
 
+const playAudio = (audioFile) => {
+  const chosenTrack = new Audio(`../src/audio/${audioFile}.mp3`);
+  if (chosenTrack.src.slice(-8) === "fire.mp3") chosenTrack.volume = 0.6;
+  if (chosenTrack.src.slice(-8) === "hits.mp3") chosenTrack.volume = 0.45;
+  chosenTrack.play();
+};
+
+const addImage = (cell, imageName) => {
+  const image = document.createElement("img");
+  image.classList.add("impact-img");
+  image.src = `../src/img/${imageName}.png`;
+  setTimeout(() => {
+    image.style.opacity = "1";
+  }, 0);
+  cell.appendChild(image);
+};
+
+const animateCell = (cell) => {
+  const animations = ["shake-1", "shake-2", "shake-3", "shake-4", "shake-5"];
+  const randomNumber = Math.random();
+  const chosenAnimation = Math.floor(randomNumber / 0.2);
+  const animationRotation = animations[chosenAnimation];
+  cell.style.animation = `${animationRotation} 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)`;
+  cell.classList.add("cell-shake");
+};
+
+const winnerText = (gameboardDom, winOrLoseText, addClass) => {
+  const declareWinOrLose = document.createElement("div");
+  declareWinOrLose.textContent = `${winOrLoseText}`;
+  declareWinOrLose.classList.add(addClass);
+  setTimeout(() => {
+    declareWinOrLose.style.opacity = "1";
+  }, 0);
+  gameboardDom.appendChild(declareWinOrLose);
+};
+
 const renderGameboard = (gameboard, numOfSquares) => {
   for (let i = 0; i < numOfSquares; i++) {
     const cell = document.createElement("div");
@@ -47,11 +83,24 @@ shipsLeftPlayer1.textContent = shipsLeftPlayer1value.value;
 shipsLeftPlayer2.textContent = shipsLeftPlayer2value.value;
 
 const updatePlayerDom = (cell, hitsTakenPlayer, hitsTakenPlayerValue) => {
-  if (cell.classList.contains("shipOnSquare") && !cell.classList.contains("ship-hit")) {
-    cell.classList.add("ship-hit");
-    hitsTakenPlayerValue.value += 1;
-    hitsTakenPlayer.textContent = hitsTakenPlayerValue.value;
-  } else cell.classList.add("cell-hit");
+  playAudio("fire");
+  setTimeout(function () {
+    if (cell.classList.contains("shipOnSquare") && !cell.classList.contains("ship-hit")) {
+      cell.classList.add("ship-hit");
+      hitsTakenPlayerValue.value += 1;
+      hitsTakenPlayer.textContent = hitsTakenPlayerValue.value;
+      addImage(cell, "ship-hit-explosion1");
+      playAudio("hits");
+    } else {
+      cell.classList.add("ship-miss");
+      addImage(cell, "water-droplet1");
+      playAudio("miss");
+      animateCell(cell);
+      setTimeout(() => {
+        cell.classList.remove("cell-shake");
+      }, 500);
+    }
+  }, 300);
 };
 
 const updateShipsLeftDom = (shipsLeftPlayer, shipsLeftPlayerValue) => {
@@ -62,49 +111,48 @@ const updateShipsLeftDom = (shipsLeftPlayer, shipsLeftPlayerValue) => {
 player1gameboardDom.addEventListener("registerHit", (e) => {
   updatePlayerDom(e.detail.target, hitsTakenPlayer1, hitsTakenPlayer1value);
 });
-player1gameboardDom.addEventListener("registerShipSunk", (e) => {
-  updateShipsLeftDom(shipsLeftPlayer1, shipsLeftPlayer1value);
-});
-
 player2gameboardDom.addEventListener("registerHit", (e) => {
   updatePlayerDom(e.detail.target, hitsTakenPlayer2, hitsTakenPlayer2value);
 });
+
+player1gameboardDom.addEventListener("registerShipSunk", (e) => {
+  updateShipsLeftDom(shipsLeftPlayer1, shipsLeftPlayer1value);
+  setTimeout(function () {
+    playAudio("sink");
+  }, 600);
+});
 player2gameboardDom.addEventListener("registerShipSunk", (e) => {
   updateShipsLeftDom(shipsLeftPlayer2, shipsLeftPlayer2value);
+  setTimeout(function () {
+    playAudio("sink");
+  }, 600);
 });
 
+document.addEventListener("registerWinner", (e) => {
+  if (e.detail.value === false) {
+    console.log("Player1 wins");
+    visualiseWinnerGameboardDom(player1gameboardDom, player2gameboardDom);
+  }
+  if (e.detail.value === true) {
+    console.log("Player2 wins");
+    visualiseWinnerGameboardDom(player2gameboardDom, player1gameboardDom);
+  }
+  // player1gameboardDom.removeEventListener("registerHit", e);
+  // player2gameboardDom.removeEventListener("registerHit", e);
+});
+
+const visualiseWinnerGameboardDom = (winningPlayerGameboardDom, losingPlayerGameboardDom) => {
+  const winnerArray = Array.from(winningPlayerGameboardDom.children);
+  setTimeout(function () {
+    winnerArray.forEach((child) => child.classList.add("win"));
+    winnerText(winningPlayerGameboardDom, "YOU WIN", "you-win-message");
+  }, 1000);
+
+  const loserArray = Array.from(losingPlayerGameboardDom.children);
+  setTimeout(function () {
+    winnerText(losingPlayerGameboardDom, "YOU LOSE", "you-lose-message");
+    loserArray.forEach((child) => child.classList.add("lose"));
+  }, 1000);
+};
+
 export {};
-
-// const registerHit = (gameboard, cell) => {
-//   const cellInArray = gameboard.find((element) => {
-//     return element.coord === cell.dataset.coord;
-//   });
-//   if (cellInArray.cellHit === true) return false;
-//   cellInArray.cellHit = true;
-//   if (cell.classList.contains("shipOnSquare")) {
-//     cell.classList.add("ship-hit");
-//     return true;
-//   }
-//   if (!cell.classList.contains("shipOnSquare")) {
-//     cell.classList.add("cell-hit");
-//     return false;
-//   }
-// };
-
-// player1gameboardDom.addEventListener("attacked", (e) => {
-// const isHit = registerHit(player1gameboard, e.detail.target);
-// if (isHit === true) {
-//   hitsTakenPlayer1value += 1;
-//   hitsTakenPlayer1.textContent = hitsTakenPlayer1value;
-//   updateShipsLeft(shipArrayPlayer1, shipsLeftPlayer1);
-// }
-// });
-
-// player2gameboardDom.addEventListener("attacked", (e) => {
-// const isHit = registerHit(player2gameboard, e.detail.target);
-// if (isHit === true) {
-//   hitsTakenPlayer2value += 1;
-//   hitsTakenPlayer2.textContent = hitsTakenPlayer2value;
-//   updateShipsLeft(shipArrayPlayer2, shipsLeftPlayer2);
-// }
-// });

@@ -10,11 +10,6 @@ import { allShipsSunk } from "./allShipsSunk.js";
 
 import { event, registerHit } from "./dom.js";
 
-// * Formatting for function calls
-// placeShip(ship, gameboard, coord, orientation)
-// receiveAttack(gameboard, coord);
-// shipFactory(length, hits, sunk, player)
-
 // * DOM elements
 const headerTitle = document.querySelector(".header-title");
 const player1ships = document.querySelector(".player-ships");
@@ -36,15 +31,15 @@ const player2ship3 = shipFactory(1, 0, false, 2);
 // const player1 = playerFactory("Svein-Egil");
 // const player2 = playerFactory("Computer");
 
-placeShip(player1ship1, player1gameboard, "1.1", "horizontal");
-placeShip(player1ship2, player1gameboard, "3.3", "vertical");
+// placeShip(player1ship1, player1gameboard, "1.1", "horizontal");
+// placeShip(player1ship2, player1gameboard, "3.3", "vertical");
 placeShip(player1ship3, player1gameboard, "5.5", "horizontal");
 
-placeShip(player2ship1, player2gameboard, "1.1", "horizontal");
-placeShip(player2ship2, player2gameboard, "3.3", "vertical");
+// placeShip(player2ship1, player2gameboard, "1.1", "horizontal");
+// placeShip(player2ship2, player2gameboard, "3.3", "vertical");
 placeShip(player2ship3, player2gameboard, "5.5", "horizontal");
 
-let isPlayer1Turn = { value: true };
+let isPlayer1Turn = { value: false };
 
 const game = (playerGameboardDom, playerGameboard, shipArray) => {
   const handleAttack = (e) => {
@@ -58,17 +53,20 @@ const game = (playerGameboardDom, playerGameboard, shipArray) => {
       if (shipSunk === true) {
         const registerShipSunkEvent = new CustomEvent("registerShipSunk", { detail: { target: e.target } });
         playerGameboardDom.dispatchEvent(registerShipSunkEvent);
-        if (allShipsSunk(playerGameboard) !== false) console.log("we have a winner!");
+        if (allShipsSunk(playerGameboard) !== false) {
+          const registerWinnerEvent = new CustomEvent("registerWinner", { detail: isPlayer1Turn });
+          document.dispatchEvent(registerWinnerEvent);
+          playerGameboardDom.removeEventListener("click", handleAttack);
+          return;
+        }
       }
     }
     playerGameboardDom.removeEventListener("click", handleAttack);
     if (isPlayer1Turn.value === true) {
       isPlayer1Turn.value = false;
-      console.log("first", isPlayer1Turn);
       game(player2.dom, player2.gameboard, player2.ships);
     } else {
       isPlayer1Turn.value = true;
-      console.log("second", isPlayer1Turn);
       game(player1.dom, player1.gameboard, player1.ships);
     }
   };
@@ -86,6 +84,6 @@ const player2 = {
   ships: shipArrayPlayer2,
 };
 
-game(player1.dom, player1.gameboard, player1.ships);
+game(player2.dom, player2.gameboard, player2.ships);
 
 export { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2 };

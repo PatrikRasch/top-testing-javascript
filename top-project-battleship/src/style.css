@@ -47,21 +47,23 @@ body {
   max-width: 500px;
   min-width: 100px;
   padding-top: 100%;
-  /* background-color: rgb(90, 90, 184); */
 }
 
 .gameboard {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   min-width: 100px;
+  position: relative;
 }
 
 .cell {
-  max-width: 50px;
+  position: relative;
+  max-width: 10vw;
   min-width: 10px;
   padding-top: 100%;
-  border: 0.5px solid rgb(39, 88, 100);
-  background-color: gray;
+  border: 1px solid rgb(255, 255, 255);
+  background-color: rgb(152, 201, 200);
+  transition: background-color 0.5s, opacity 0s;
 }
 
 .ships-left,
@@ -79,7 +81,7 @@ body {
 }
 
 .shipOnSquare {
-  background-color: #1b8f79;
+  background-color: #20aaaf;
 }
 
 .cell:hover {
@@ -91,10 +93,116 @@ body {
   cursor: not-allowed;
 }
 
-.cell-hit {
-  background-color: orange;
+.ship-miss {
+  background-color: rgba(90, 233, 255, 0.417);
 }
 
 .ship-hit {
   background-color: red;
+}
+
+.win {
+  background-color: rgb(24, 95, 0);
+  opacity: 0.5;
+  transition: 1s;
+}
+
+.lose {
+  background-color: rgb(95, 0, 0);
+  opacity: 0.5;
+  transition: 1s;
+}
+
+.you-lose-message,
+.you-win-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: Assistant-SemiBold;
+  font-size: 50px;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 25px;
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.impact-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  transition: 0.5s;
+  opacity: 0;
+}
+
+.cell-shake {
+  z-index: 1;
+  animation: shake 1s;
+}
+
+@keyframes shake-1 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate(0px, 0px) rotate(7deg) scale(1.3);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes shake-2 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate(0px, 0px) rotate(-7deg) scale(1.3);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes shake-3 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate(10px, 0px) rotate(-12deg) scale(1.2);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes shake-4 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate(0px, 0px) rotate(15deg) scale(1.4);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes shake-5 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate(0px, 10px) rotate(-20deg) scale(1.5);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
 }
