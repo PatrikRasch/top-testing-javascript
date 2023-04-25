@@ -86,6 +86,7 @@ body {
 
 .cell:hover {
   opacity: 0.9;
+  transition: opacity 0s;
 }
 
 .cell-hit,
@@ -119,8 +120,9 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 50%;
   font-family: Assistant-SemiBold;
-  font-size: 50px;
+  font-size: calc(3vw);
   color: white;
   text-align: center;
   white-space: nowrap;

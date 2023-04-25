@@ -130,15 +130,11 @@ player2gameboardDom.addEventListener("registerShipSunk", (e) => {
 
 document.addEventListener("registerWinner", (e) => {
   if (e.detail.value === false) {
-    console.log("Player1 wins");
     visualiseWinnerGameboardDom(player1gameboardDom, player2gameboardDom);
   }
   if (e.detail.value === true) {
-    console.log("Player2 wins");
     visualiseWinnerGameboardDom(player2gameboardDom, player1gameboardDom);
   }
-  // player1gameboardDom.removeEventListener("registerHit", e);
-  // player2gameboardDom.removeEventListener("registerHit", e);
 });
 
 const visualiseWinnerGameboardDom = (winningPlayerGameboardDom, losingPlayerGameboardDom) => {
