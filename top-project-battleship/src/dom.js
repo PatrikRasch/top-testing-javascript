@@ -1,6 +1,6 @@
-import { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2 } from "./gameplay";
+import { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2, placeShip } from "./gameplay";
 
-const headerTitle = document.querySelector(".header-title");
+const headerAction = document.querySelector(".header-action-button");
 
 const player1ships = document.querySelector(".player-ships");
 const player2ships = document.querySelector(".computer-ships");
@@ -18,6 +18,13 @@ const playAudio = (audioFile) => {
   const chosenTrack = new Audio(`../src/audio/${audioFile}.mp3`);
   if (chosenTrack.src.slice(-8) === "fire.mp3") chosenTrack.volume = 0.6;
   if (chosenTrack.src.slice(-8) === "hits.mp3") chosenTrack.volume = 0.45;
+  if (chosenTrack.src.slice(-8) === "wave.mp3") {
+    chosenTrack.volume = 0;
+    const fadeIn = setInterval(() => {
+      chosenTrack.volume += 0.05;
+      if (chosenTrack.volume >= 0.3) clearInterval(fadeIn);
+    }, 500);
+  }
   chosenTrack.play();
 };
 
@@ -68,9 +75,106 @@ const markShipsOnGameboard = (gameboard, gameboardDom) => {
   });
 };
 
+headerAction.textContent = "Sink Their Ships!";
+
 renderGameboard(player1gameboardDom, player1gameboard.length);
 renderGameboard(player2gameboardDom, player1gameboard.length);
 markShipsOnGameboard(player1gameboard, player1gameboardDom);
+
+// * Darker background
+const placeShipsModalBackground = document.createElement("div");
+placeShipsModalBackground.classList.add("place-ships-modal-background");
+document.body.appendChild(placeShipsModalBackground);
+
+// * Modal on darker background
+const placeShipsModal = document.createElement("div");
+placeShipsModal.classList.add("place-ships-modal");
+placeShipsModalBackground.appendChild(placeShipsModal);
+
+// * Gameboard clone on modal
+const player1gameboardDomClone = player1gameboardDom.cloneNode(true);
+player1gameboardDomClone.classList.add("player1-gameboard-clone");
+placeShipsModal.appendChild(player1gameboardDomClone);
+
+const cloneCells = player1gameboardDomClone.querySelectorAll(".cell");
+cloneCells.forEach((cell) => {
+  cell.classList.remove("cell");
+  cell.classList.add("cloneCell");
+});
+
+shipArrayPlayer1.sort((a, b) => b.length - a.length);
+
+const placerShipArrayPlayer1 = [...shipArrayPlayer1];
+
+player1gameboardDomClone.addEventListener("mouseover", (e) => {
+  const length = placerShipArrayPlayer1[0].length;
+  const split = e.target.dataset.coord.split(".");
+  for (let i = 0; i < length; i++) {
+    const partTargetNum = Number(split[1]) + (length - i - 1);
+    const toBeMarked = split[0] + "." + partTargetNum;
+    const elementsToBeMarked = player1gameboardDomClone.querySelectorAll(`[data-coord="${toBeMarked}"]`);
+    elementsToBeMarked.forEach((element) => {
+      element.classList.add("ship-pre-placement", "ship-pre-placement-transition");
+    });
+    const allIllegalTargets = player1gameboardDomClone.querySelectorAll(".ship-pre-placement");
+    if (Number(split[1]) + length > Math.sqrt(player1gameboardDomClone.children.length)) {
+      allIllegalTargets.forEach((element) => {
+        element.classList.add("ship-pre-placement-illegal");
+      });
+    }
+  }
+});
+
+player1gameboardDomClone.addEventListener("mouseout", (e) => {
+  for (let i = 0; i < player1gameboardDomClone.children.length; i++) {
+    player1gameboardDomClone.childNodes[i].classList.remove("ship-pre-placement");
+    player1gameboardDomClone.childNodes[i].classList.remove("ship-pre-placement-illegal");
+    setTimeout(() => {
+      player1gameboardDomClone.childNodes[i].classList.remove("ship-pre-placement-transition");
+    }, 800);
+  }
+});
+
+player1gameboardDomClone.addEventListener("click", (e) => {
+  if (placeShip(placerShipArrayPlayer1[0], player1gameboard, e.target.dataset.coord, "horizontal") === false) {
+    console.log(player1gameboard);
+    return false;
+  }
+  playAudio("cock");
+  markShipsOnGameboard(player1gameboard, player1gameboardDomClone);
+  markShipsOnGameboard(player1gameboard, player1gameboardDom);
+  placerShipArrayPlayer1.shift();
+  if (placerShipArrayPlayer1.length === 0) {
+    placeShipsModalBackground.style.opacity = 0;
+    placeShipsModalBackground.style.display = "none";
+    playAudio("wave");
+  }
+});
+
+const orientationDecider = () => {
+  let randomNumber = Math.random();
+  if (randomNumber > 0.5) return "horizontal";
+  if (randomNumber <= 0.5) return "vertical";
+};
+
+const placeShipsPlayer2 = () => {
+  shipArrayPlayer2.forEach((ship) => {
+    let randomNumber = Math.floor(Math.random() * 10) + "." + Math.floor(Math.random() * 10);
+    let placedShip = false;
+    while (!placedShip) {
+      try {
+        placedShip = placeShip(ship, player2gameboard, randomNumber, orientationDecider());
+      } catch (error) {
+        console.log(error);
+      }
+      if (!placedShip) {
+        randomNumber = Math.floor(Math.random() * 10) + "." + Math.floor(Math.random() * 10);
+      }
+    }
+  });
+};
+
+placeShipsPlayer2();
 markShipsOnGameboard(player2gameboard, player2gameboardDom);
 
 let hitsTakenPlayer1value = { value: 0 };
@@ -152,3 +256,18 @@ const visualiseWinnerGameboardDom = (winningPlayerGameboardDom, losingPlayerGame
 };
 
 export {};
+
+// shipArrayPlayer1.forEach(() => {
+//   const shipContainer = document.createElement("div");
+//   shipContainer.classList.add("ship-container");
+//   player1ships.appendChild(shipContainer);
+// });
+
+// for (let i = 0; i < player1ships.children.length; i++) {
+//   const shipLength = shipArrayPlayer1[i].length;
+//   for (let i = 0; i < shipLength; i++) {
+//     const shipCell = document.createElement("div");
+//     shipCell.classList.add("ship-pre-placement");
+//     placeShipsModal.childNodes[i].appendChild(shipCell);
+//   }
+// }

@@ -20,24 +20,20 @@ const player2gameboardDom = document.querySelector(".computer-gameboard");
 const player1gameboard = gameboardFactory(10);
 const player2gameboard = gameboardFactory(10);
 
-const player1ship1 = shipFactory(3, 0, false, 1);
-const player1ship2 = shipFactory(2, 0, false, 1);
-const player1ship3 = shipFactory(1, 0, false, 1);
+const player1ship1 = shipFactory(5, 0, false, 1);
+const player1ship2 = shipFactory(4, 0, false, 1);
+const player1ship3 = shipFactory(3, 0, false, 1);
+const player1ship4 = shipFactory(2, 0, false, 1);
+const player1ship5 = shipFactory(1, 0, false, 1);
 
-const player2ship1 = shipFactory(3, 0, false, 2);
-const player2ship2 = shipFactory(2, 0, false, 2);
-const player2ship3 = shipFactory(1, 0, false, 2);
+const player2ship1 = shipFactory(5, 0, false, 2);
+const player2ship2 = shipFactory(4, 0, false, 2);
+const player2ship3 = shipFactory(3, 0, false, 2);
+const player2ship4 = shipFactory(2, 0, false, 2);
+const player2ship5 = shipFactory(1, 0, false, 2);
 
 // const player1 = playerFactory("Svein-Egil");
 // const player2 = playerFactory("Computer");
-
-placeShip(player1ship1, player1gameboard, "1.1", "horizontal");
-placeShip(player1ship2, player1gameboard, "3.3", "vertical");
-placeShip(player1ship3, player1gameboard, "5.5", "horizontal");
-
-placeShip(player2ship1, player2gameboard, "1.1", "horizontal");
-placeShip(player2ship2, player2gameboard, "3.3", "vertical");
-placeShip(player2ship3, player2gameboard, "5.5", "horizontal");
 
 let isPlayer1Turn = { value: false };
 
@@ -47,7 +43,7 @@ const AI = (playerGameboardDom, playerGameboard) => {
   while (playerGameboard[randomNumber].cellHit === true) {
     randomNumber = Math.floor(100 * Math.random());
   }
-  const attackTime = Math.floor(500 * Math.random()) + 250;
+  const attackTime = Math.floor(600 * Math.random()) + 350;
   setTimeout(() => {
     playerGameboardDomArray[randomNumber].click();
     // if (playerGameboard[randomNumber].containsShip !== false) {
@@ -109,4 +105,4 @@ const player2 = {
 
 game(player2.dom, player2.gameboard, player2.ships);
 
-export { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2 };
+export { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2, placeShip };
