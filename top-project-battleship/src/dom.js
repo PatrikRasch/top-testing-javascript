@@ -91,10 +91,21 @@ const placeShipsModal = document.createElement("div");
 placeShipsModal.classList.add("place-ships-modal");
 placeShipsModalBackground.appendChild(placeShipsModal);
 
+const switchOrientationButton = document.createElement("button");
+switchOrientationButton.classList.add("switch-orientation-button");
+switchOrientationButton.textContent = "Change orientation \n X";
+placeShipsModal.appendChild(switchOrientationButton);
+
 // * Gameboard clone on modal
 const player1gameboardDomClone = player1gameboardDom.cloneNode(true);
 player1gameboardDomClone.classList.add("player1-gameboard-clone");
 placeShipsModal.appendChild(player1gameboardDomClone);
+
+let currentOrientation = "X";
+switchOrientationButton.addEventListener("click", (e) => {
+  currentOrientation = currentOrientation === "X" ? "Y" : "X";
+  switchOrientationButton.textContent = `Change orientation \n ${currentOrientation}`;
+});
 
 const cloneCells = player1gameboardDomClone.querySelectorAll(".cell");
 cloneCells.forEach((cell) => {
@@ -110,17 +121,34 @@ player1gameboardDomClone.addEventListener("mouseover", (e) => {
   const length = placerShipArrayPlayer1[0].length;
   const split = e.target.dataset.coord.split(".");
   for (let i = 0; i < length; i++) {
-    const partTargetNum = Number(split[1]) + (length - i - 1);
-    const toBeMarked = split[0] + "." + partTargetNum;
+    let partTargetNum = Number;
+    let toBeMarked = String;
+    if (currentOrientation === "X") {
+      partTargetNum = Number(split[1]) + (length - i - 1);
+      toBeMarked = split[0] + "." + partTargetNum;
+    }
+    if (currentOrientation === "Y") {
+      partTargetNum = Number(split[0]) + (length - i - 1);
+      toBeMarked = partTargetNum + "." + split[1];
+    }
     const elementsToBeMarked = player1gameboardDomClone.querySelectorAll(`[data-coord="${toBeMarked}"]`);
     elementsToBeMarked.forEach((element) => {
       element.classList.add("ship-pre-placement", "ship-pre-placement-transition");
     });
     const allIllegalTargets = player1gameboardDomClone.querySelectorAll(".ship-pre-placement");
-    if (Number(split[1]) + length > Math.sqrt(player1gameboardDomClone.children.length)) {
-      allIllegalTargets.forEach((element) => {
-        element.classList.add("ship-pre-placement-illegal");
-      });
+    if (currentOrientation === "X") {
+      if (Number(split[1]) + length > Math.sqrt(player1gameboardDomClone.children.length)) {
+        allIllegalTargets.forEach((element) => {
+          element.classList.add("ship-pre-placement-illegal");
+        });
+      }
+    }
+    if (currentOrientation === "Y") {
+      if (Number(split[0]) + length > Math.sqrt(player1gameboardDomClone.children.length)) {
+        allIllegalTargets.forEach((element) => {
+          element.classList.add("ship-pre-placement-illegal");
+        });
+      }
     }
   }
 });
@@ -136,8 +164,15 @@ player1gameboardDomClone.addEventListener("mouseout", (e) => {
 });
 
 player1gameboardDomClone.addEventListener("click", (e) => {
-  if (placeShip(placerShipArrayPlayer1[0], player1gameboard, e.target.dataset.coord, "horizontal") === false) {
-    return false;
+  if (currentOrientation === "X") {
+    if (placeShip(placerShipArrayPlayer1[0], player1gameboard, e.target.dataset.coord, "horizontal") === false) {
+      return false;
+    }
+  }
+  if (currentOrientation === "Y") {
+    if (placeShip(placerShipArrayPlayer1[0], player1gameboard, e.target.dataset.coord, "vertical") === false) {
+      return false;
+    }
   }
   playAudio("cock");
   markShipsOnGameboard(player1gameboard, player1gameboardDomClone);

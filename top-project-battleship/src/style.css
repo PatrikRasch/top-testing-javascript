@@ -40,10 +40,27 @@ body {
   justify-items: center;
 }
 
+.switch-orientation-button {
+  align-self: center;
+  font-family: Assistant;
+  font-size: clamp(12px, 1.4rem, 50px);
+  width: clamp(20px, 15vw, 200px);
+  height: clamp(10px, 6rem, 100px);
+  border-radius: 15px;
+  border: none;
+  background-color: rgb(152, 201, 200);
+  color: white;
+}
+
+@media (max-width: 800px) {
+  .switch-orientation-button {
+    font-size: clamp(12px, 0.8rem, 1.4vw);
+  }
+}
+
 .player1-gameboard-clone {
   width: 60%;
   height: 60%;
-  top: 25%;
 }
 
 .gameboard-title-row,
