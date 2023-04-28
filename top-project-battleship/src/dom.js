@@ -137,7 +137,6 @@ player1gameboardDomClone.addEventListener("mouseout", (e) => {
 
 player1gameboardDomClone.addEventListener("click", (e) => {
   if (placeShip(placerShipArrayPlayer1[0], player1gameboard, e.target.dataset.coord, "horizontal") === false) {
-    console.log(player1gameboard);
     return false;
   }
   playAudio("cock");
@@ -160,13 +159,12 @@ const orientationDecider = () => {
 const placeShipsPlayer2 = () => {
   shipArrayPlayer2.forEach((ship) => {
     let randomNumber = Math.floor(Math.random() * 10) + "." + Math.floor(Math.random() * 10);
+    // placeShip(ship, player2gameboard, randomNumber, orientationDecider());
     let placedShip = false;
-    while (!placedShip) {
+    while (placedShip === false) {
       try {
         placedShip = placeShip(ship, player2gameboard, randomNumber, orientationDecider());
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
       if (!placedShip) {
         randomNumber = Math.floor(Math.random() * 10) + "." + Math.floor(Math.random() * 10);
       }

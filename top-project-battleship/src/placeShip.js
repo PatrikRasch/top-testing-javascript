@@ -8,33 +8,32 @@ const placeShip = (ship, gameboard, coord, orientation) => {
   }
   const [startY, startX] = coord.split(".").map(Number); // Make the coordinates into numbers in an array
   let squaresToMark = ship.length; // Define how many squares are to be taken up by the ship
+
+  let squaresToBeMarked = [];
   let anyFalse = false;
 
-  // TODO - Scan the gameboard to see if any coordinates I want to place ships
-  // TODO - on already have ships on them. If so, return false.
-  // TODO - If not, then go into the loop and place the ship
-
-  while (squaresToMark > 0) {
+  for (let i = 0; i < squaresToMark; i) {
     if (orientation === "horizontal") {
       const coordinateToFindX = `${startY}.${startX + --squaresToMark}`;
       const elementToMark = findElementToMark(gameboard, coordinateToFindX);
-      if (elementToMark.containsShip) {
-        anyFalse = true;
-        break;
-      }
-      elementToMark.containsShip = ship.id;
+      squaresToBeMarked.push(elementToMark);
     }
     if (orientation === "vertical") {
       const coordinateToFindY = `${startY + --squaresToMark}.${startX}`;
       const elementToMark = findElementToMark(gameboard, coordinateToFindY);
-      if (elementToMark.containsShip) {
-        anyFalse = true;
-        break;
-      }
-      elementToMark.containsShip = ship.id;
+      squaresToBeMarked.push(elementToMark);
     }
   }
-  if (anyFalse) return false;
+
+  squaresToBeMarked.forEach((cell) => {
+    if (cell.containsShip) anyFalse = true;
+  });
+
+  if (anyFalse === true) return false;
+
+  squaresToBeMarked.forEach((cell) => {
+    cell.containsShip = ship.id;
+  });
   return gameboard;
 };
 
