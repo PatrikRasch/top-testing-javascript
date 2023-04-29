@@ -2,9 +2,6 @@ import { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2,
 
 const headerAction = document.querySelector(".header-action-button");
 
-const player1ships = document.querySelector(".player-ships");
-const player2ships = document.querySelector(".computer-ships");
-
 const player1gameboardDom = document.querySelector(".player-gameboard");
 const player2gameboardDom = document.querySelector(".computer-gameboard");
 
@@ -85,7 +82,7 @@ const updateShipToBePlacedName = () => {
   placeShipMessage.textContent = `Place the ${shipToBePlaced}`;
 };
 
-headerAction.textContent = "Sink Their Ships!";
+headerAction.textContent = "Sink Their Ships";
 
 renderGameboard(player1gameboardDom, player1gameboard.length);
 renderGameboard(player2gameboardDom, player1gameboard.length);
@@ -137,7 +134,7 @@ cloneCells.forEach((cell) => {
 
 shipArrayPlayer1.sort((a, b) => b.length - a.length);
 
-const placerShipArrayPlayer1 = [...shipArrayPlayer1];
+let placerShipArrayPlayer1 = [...shipArrayPlayer1];
 
 player1gameboardDomClone.addEventListener("mouseover", (e) => {
   const length = placerShipArrayPlayer1[0].length;
@@ -216,7 +213,7 @@ player1gameboardDomClone.addEventListener("click", (e) => {
   if (placerShipArrayPlayer1.length === 0) {
     placeShipsModalBackground.style.opacity = 0;
     placeShipsModalBackground.style.display = "none";
-    playAudio("wave");
+    // playAudio("wave");
   }
 });
 
@@ -314,13 +311,73 @@ const visualiseWinnerGameboardDom = (winningPlayerGameboardDom, losingPlayerGame
   setTimeout(function () {
     winnerArray.forEach((child) => child.classList.add("win"));
     winnerText(winningPlayerGameboardDom, "YOU WIN", "you-win-message");
+    headerAction.textContent = "Play Again";
   }, 1000);
 
   const loserArray = Array.from(losingPlayerGameboardDom.children);
   setTimeout(function () {
     winnerText(losingPlayerGameboardDom, "YOU LOSE", "you-lose-message");
     loserArray.forEach((child) => child.classList.add("lose"));
+    headerAction.textContent = "Play Again?";
   }, 1000);
 };
+
+headerAction.addEventListener("click", (e) => {
+  const gameboard1domArray = Array.from(player1gameboardDom.children);
+  const gameboard1domCloneArray = Array.from(player1gameboardDomClone.children);
+  gameboard1domArray.forEach((element) => {
+    element.classList.remove("win", "lose", "shipOnSquare", "ship-hit", "ship-miss");
+    if (element.firstChild) element.removeChild(element.firstChild);
+  });
+  gameboard1domCloneArray.forEach((element) => {
+    element.classList.remove("win", "shipOnSquare");
+  });
+  const gameboard1removeMessage = player1gameboardDom.querySelector(".you-win-message");
+  player1gameboardDom.removeChild(gameboard1removeMessage);
+
+  player1gameboard.forEach((element) => {
+    element.containsShip = false;
+    element.cellHit = false;
+  });
+
+  const gameboard2domArray = Array.from(player2gameboardDom.children);
+  gameboard2domArray.forEach((element) => {
+    element.classList.remove("win", "lose", "shipOnSquare", "ship-hit", "ship-miss");
+    if (element.firstChild) element.removeChild(element.firstChild);
+  });
+  const gameboard2removeMessage = player2gameboardDom.querySelector(".you-lose-message");
+  player2gameboardDom.removeChild(gameboard2removeMessage);
+
+  player2gameboard.forEach((element) => {
+    element.containsShip = false;
+    element.cellHit = false;
+  });
+
+  placeShipsModalBackground.style.opacity = 1;
+  placeShipsModalBackground.style.display = "block";
+
+  shipArrayPlayer1.forEach((ship) => {
+    ship.hits = 0;
+    ship.sunk = false;
+  });
+  placerShipArrayPlayer1 = [...shipArrayPlayer1];
+  shipArrayPlayer2.forEach((ship) => {
+    ship.hits = 0;
+    ship.sunk = false;
+  });
+
+  placeShipsPlayer2();
+  markShipsOnGameboard(player2gameboard, player2gameboardDom);
+
+  hitsTakenPlayer1value.value = 0;
+  hitsTakenPlayer2value.value = 0;
+  hitsTakenPlayer1.textContent = hitsTakenPlayer1value.value;
+  hitsTakenPlayer2.textContent = hitsTakenPlayer2value.value;
+
+  shipsLeftPlayer1value.value = shipArrayPlayer1.length;
+  shipsLeftPlayer1.textContent = shipsLeftPlayer1value.value;
+  shipsLeftPlayer2value.value = shipArrayPlayer2.length;
+  shipsLeftPlayer2.textContent = shipsLeftPlayer2value.value;
+});
 
 export {};

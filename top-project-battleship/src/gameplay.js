@@ -8,12 +8,7 @@ import { shipHit } from "./shipHit.js";
 import { isSunk } from "./isSunk.js";
 import { allShipsSunk } from "./allShipsSunk.js";
 
-import { event, registerHit } from "./dom.js";
-
 // * DOM elements
-const headerTitle = document.querySelector(".header-title");
-const player1ships = document.querySelector(".player-ships");
-const player2ships = document.querySelector(".computer-ships");
 const player1gameboardDom = document.querySelector(".player-gameboard");
 const player2gameboardDom = document.querySelector(".computer-gameboard");
 
@@ -32,9 +27,6 @@ const player2ship3 = shipFactory(3, 0, false, 2);
 const player2ship4 = shipFactory(2, 0, false, 2);
 const player2ship5 = shipFactory(1, 0, false, 2);
 
-// const player1 = playerFactory("Svein-Egil");
-// const player2 = playerFactory("Computer");
-
 let isPlayer1Turn = { value: false };
 
 const AI = (playerGameboardDom, playerGameboard) => {
@@ -43,7 +35,7 @@ const AI = (playerGameboardDom, playerGameboard) => {
   while (playerGameboard[randomNumber].cellHit === true) {
     randomNumber = Math.floor(100 * Math.random());
   }
-  const attackTime = Math.floor(600 * Math.random()) + 350;
+  const attackTime = Math.floor(600 * Math.random()) + 550;
   setTimeout(() => {
     playerGameboardDomArray[randomNumber].click();
     // if (playerGameboard[randomNumber].containsShip !== false) {
@@ -91,6 +83,11 @@ const game = (playerGameboardDom, playerGameboard, shipArray) => {
   };
   playerGameboardDom.addEventListener("click", handleAttack);
 };
+
+const headerAction = document.querySelector(".header-action-button");
+headerAction.addEventListener("click", (e) => {
+  game(player2.dom, player2.gameboard, player2.ships);
+});
 
 const player1 = {
   dom: player1gameboardDom,
