@@ -18,6 +18,7 @@ const playAudio = (audioFile) => {
   const chosenTrack = new Audio(`../src/audio/${audioFile}.mp3`);
   if (chosenTrack.src.slice(-8) === "fire.mp3") chosenTrack.volume = 0.6;
   if (chosenTrack.src.slice(-8) === "hits.mp3") chosenTrack.volume = 0.45;
+  if (chosenTrack.src.slice(-8) === "deny.mp3") chosenTrack.volume = 0.45;
   if (chosenTrack.src.slice(-8) === "wave.mp3") {
     chosenTrack.volume = 0;
     const fadeIn = setInterval(() => {
@@ -75,6 +76,15 @@ const markShipsOnGameboard = (gameboard, gameboardDom) => {
   });
 };
 
+const updateShipToBePlacedName = () => {
+  let shipToBePlaced = "";
+  if (placerShipArrayPlayer1[0].length === 4) shipToBePlaced = "Battle Cruiser";
+  if (placerShipArrayPlayer1[0].length === 3) shipToBePlaced = "Cruiser";
+  if (placerShipArrayPlayer1[0].length === 2) shipToBePlaced = "Destoyer";
+  if (placerShipArrayPlayer1[0].length === 1) shipToBePlaced = "Frigate";
+  placeShipMessage.textContent = `Place the ${shipToBePlaced}`;
+};
+
 headerAction.textContent = "Sink Their Ships!";
 
 renderGameboard(player1gameboardDom, player1gameboard.length);
@@ -91,9 +101,14 @@ const placeShipsModal = document.createElement("div");
 placeShipsModal.classList.add("place-ships-modal");
 placeShipsModalBackground.appendChild(placeShipsModal);
 
+const placeShipMessage = document.createElement("div");
+placeShipMessage.classList.add("place-ship-message");
+placeShipMessage.textContent = "Place the Aircraft Carrier";
+placeShipsModal.appendChild(placeShipMessage);
+
 const switchOrientationButton = document.createElement("button");
 switchOrientationButton.classList.add("switch-orientation-button");
-switchOrientationButton.textContent = "Change orientation \n X";
+switchOrientationButton.textContent = "Change orientation: X";
 placeShipsModal.appendChild(switchOrientationButton);
 
 // * Gameboard clone on modal
@@ -104,7 +119,14 @@ placeShipsModal.appendChild(player1gameboardDomClone);
 let currentOrientation = "X";
 switchOrientationButton.addEventListener("click", (e) => {
   currentOrientation = currentOrientation === "X" ? "Y" : "X";
-  switchOrientationButton.textContent = `Change orientation \n ${currentOrientation}`;
+  switchOrientationButton.textContent = `Change orientation: ${currentOrientation}`;
+
+  switchOrientationButton.classList.add("switch-orientation-button-clicked");
+  setTimeout(() => {
+    switchOrientationButton.classList.remove("switch-orientation-button-clicked");
+  }, 140);
+
+  playAudio("swap");
 });
 
 const cloneCells = player1gameboardDomClone.querySelectorAll(".cell");
@@ -120,6 +142,7 @@ const placerShipArrayPlayer1 = [...shipArrayPlayer1];
 player1gameboardDomClone.addEventListener("mouseover", (e) => {
   const length = placerShipArrayPlayer1[0].length;
   const split = e.target.dataset.coord.split(".");
+  const elementsToBeMarked = [];
   for (let i = 0; i < length; i++) {
     let partTargetNum = Number;
     let toBeMarked = String;
@@ -131,25 +154,34 @@ player1gameboardDomClone.addEventListener("mouseover", (e) => {
       partTargetNum = Number(split[0]) + (length - i - 1);
       toBeMarked = partTargetNum + "." + split[1];
     }
-    const elementsToBeMarked = player1gameboardDomClone.querySelectorAll(`[data-coord="${toBeMarked}"]`);
+    elementsToBeMarked.push(...player1gameboardDomClone.querySelectorAll(`[data-coord="${toBeMarked}"]`));
+  }
+  elementsToBeMarked.forEach((element) => {
+    element.classList.add("ship-pre-placement", "ship-pre-placement-transition");
+  });
+  const allIllegalTargets = player1gameboardDomClone.querySelectorAll(".ship-pre-placement");
+  if (currentOrientation === "X") {
+    if (Number(split[1]) + length > Math.sqrt(player1gameboardDomClone.children.length)) {
+      allIllegalTargets.forEach((element) => {
+        element.classList.add("ship-pre-placement-illegal");
+      });
+    }
+  }
+  if (currentOrientation === "Y") {
+    if (Number(split[0]) + length > Math.sqrt(player1gameboardDomClone.children.length)) {
+      allIllegalTargets.forEach((element) => {
+        element.classList.add("ship-pre-placement-illegal");
+      });
+    }
+  }
+  const elementsToBeMarkedArray = Array.from(elementsToBeMarked);
+  const result = elementsToBeMarkedArray.some((element) => {
+    return element.classList.contains("shipOnSquare");
+  });
+  if (result) {
     elementsToBeMarked.forEach((element) => {
-      element.classList.add("ship-pre-placement", "ship-pre-placement-transition");
+      element.classList.add("ship-pre-placement-illegal");
     });
-    const allIllegalTargets = player1gameboardDomClone.querySelectorAll(".ship-pre-placement");
-    if (currentOrientation === "X") {
-      if (Number(split[1]) + length > Math.sqrt(player1gameboardDomClone.children.length)) {
-        allIllegalTargets.forEach((element) => {
-          element.classList.add("ship-pre-placement-illegal");
-        });
-      }
-    }
-    if (currentOrientation === "Y") {
-      if (Number(split[0]) + length > Math.sqrt(player1gameboardDomClone.children.length)) {
-        allIllegalTargets.forEach((element) => {
-          element.classList.add("ship-pre-placement-illegal");
-        });
-      }
-    }
   }
 });
 
@@ -164,6 +196,8 @@ player1gameboardDomClone.addEventListener("mouseout", (e) => {
 });
 
 player1gameboardDomClone.addEventListener("click", (e) => {
+  if (e.target.classList.contains("ship-pre-placement-illegal")) playAudio("deny");
+
   if (currentOrientation === "X") {
     if (placeShip(placerShipArrayPlayer1[0], player1gameboard, e.target.dataset.coord, "horizontal") === false) {
       return false;
@@ -178,6 +212,7 @@ player1gameboardDomClone.addEventListener("click", (e) => {
   markShipsOnGameboard(player1gameboard, player1gameboardDomClone);
   markShipsOnGameboard(player1gameboard, player1gameboardDom);
   placerShipArrayPlayer1.shift();
+  if (placerShipArrayPlayer1.length !== 0) updateShipToBePlacedName();
   if (placerShipArrayPlayer1.length === 0) {
     placeShipsModalBackground.style.opacity = 0;
     placeShipsModalBackground.style.display = "none";
@@ -289,18 +324,3 @@ const visualiseWinnerGameboardDom = (winningPlayerGameboardDom, losingPlayerGame
 };
 
 export {};
-
-// shipArrayPlayer1.forEach(() => {
-//   const shipContainer = document.createElement("div");
-//   shipContainer.classList.add("ship-container");
-//   player1ships.appendChild(shipContainer);
-// });
-
-// for (let i = 0; i < player1ships.children.length; i++) {
-//   const shipLength = shipArrayPlayer1[i].length;
-//   for (let i = 0; i < shipLength; i++) {
-//     const shipCell = document.createElement("div");
-//     shipCell.classList.add("ship-pre-placement");
-//     placeShipsModal.childNodes[i].appendChild(shipCell);
-//   }
-// }
