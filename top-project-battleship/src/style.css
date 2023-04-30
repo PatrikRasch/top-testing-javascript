@@ -16,6 +16,23 @@ body {
   src: url(fonts/Aerstriko.ttf);
 }
 
+.game-container {
+  display: grid;
+  max-height: 100vh;
+}
+
+.header-title {
+  height: 20vh;
+}
+.header-action-button {
+  height: max-content;
+}
+
+.gameboard-title-row {
+  height: max-content;
+  padding: 10px 0px 10px 0px;
+}
+
 .place-ships-modal-background {
   position: absolute;
   top: 50%;
@@ -24,6 +41,8 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  display: none;
 }
 
 .place-ships-modal {
@@ -38,7 +57,7 @@ body {
   box-shadow: 0px 0px 100px 10px black;
   display: grid;
   justify-items: center;
-  grid-template-rows: 1fr 1.3fr 5.5fr;
+  grid-template-rows: 1fr 1fr 8fr;
 }
 
 .place-ship-message {
@@ -70,15 +89,9 @@ body {
   transform: scale(0.98);
 }
 
-@media (max-width: 800px) {
-  .switch-orientation-button {
-    font-size: clamp(12px, 0.8rem, 1.4vw);
-  }
-}
-
 .player1-gameboard-clone {
-  width: 60%;
-  height: 60%;
+  width: 65%;
+  height: 65%;
 }
 
 .gameboard-title-row,
@@ -91,20 +104,20 @@ body {
 
 .header {
   display: grid;
-  justify-items: center;
+  justify-content: center;
 }
 
 .header-title {
   display: grid;
-  align-self: center;
+  align-content: center;
   font-size: clamp(50px, 10vw, 200px);
   font-family: Aerstriko;
-  padding-top: 40px;
   letter-spacing: 15px;
-  margin: 20px 0px 20px 0px;
+  transform: translateY(20px);
 }
 
 .header-action-button {
+  justify-self: center;
   font-size: clamp(25px, 2vw, 40px);
   font-family: Assistant-SemiBold;
   max-height: 200px;
@@ -129,14 +142,6 @@ body {
   justify-content: center;
 }
 
-.player-ships,
-.computer-ships {
-  max-width: 500px;
-  min-width: 100px;
-  display: grid;
-  grid-template-rows: repeat(5, 60px);
-}
-
 .ship-container {
   display: grid;
   grid-auto-flow: column;
@@ -147,8 +152,8 @@ body {
 .gameboard {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  min-width: 100px;
-  position: relative;
+  width: clamp(100px, 100%, 1000px);
+  max-height: 50vh;
 }
 
 .cell {
@@ -259,6 +264,7 @@ body {
   height: 100%;
   transition: 0.5s;
   opacity: 0;
+  cursor: not-allowed;
 }
 
 .cell-shake {
@@ -325,3 +331,26 @@ body {
     transform: translate(0, 0) rotate(0deg);
   }
 }
+
+@media (max-width: 800px) {
+  .switch-orientation-button {
+    font-size: clamp(12px, 0.8rem, 1.4vw);
+  }
+  .header-action-button {
+    font-size: 20px;
+  }
+}
+
+/* @media (max-height: 800px) {
+  .gameboard-row {
+    grid-template-columns: 10vw 300px 10vw 300px 10vw;
+    display: grid;
+    justify-content: center;
+  }
+  .gameboard {
+    width: 300px;
+    height: 300px;
+  }
+  .cell {
+  }
+} */
