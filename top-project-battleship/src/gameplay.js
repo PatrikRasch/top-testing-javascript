@@ -38,13 +38,6 @@ const AI = (playerGameboardDom, playerGameboard) => {
   const attackTime = Math.floor(600 * Math.random()) + 550;
   setTimeout(() => {
     playerGameboardDomArray[randomNumber].click();
-    // if (playerGameboard[randomNumber].containsShip !== false) {
-    //   let target = playerGameboard[randomNumber].coord;
-    //   const splitTarget = target.split(".");
-    //   const targetArray = [Number(splitTarget[0]), Number(splitTarget[1])];
-    //   const newTargetArray = [targetArray[0], targetArray[1] + 1];
-    //   const newTarget = newTargetArray[0].toString() + "," + newTargetArray[1].toString();
-    // }
   }, attackTime);
 };
 
@@ -52,8 +45,12 @@ const game = (playerGameboardDom, playerGameboard, shipArray) => {
   if (isPlayer1Turn.value === true) {
     AI(playerGameboardDom, playerGameboard);
   }
-
   const handleAttack = (e) => {
+    const checkIfValidAttackEvent = new CustomEvent("checkIfValidAttack", {
+      detail: { target: e.target, isValid: true },
+    });
+    playerGameboardDom.dispatchEvent(checkIfValidAttackEvent);
+    if (checkIfValidAttackEvent.detail.isValid === false) return;
     const hitOrMiss = receiveAttack(playerGameboard, e.target.dataset.coord);
     const registerHitEvent = new CustomEvent("registerHit", { detail: { target: e.target } });
     playerGameboardDom.dispatchEvent(registerHitEvent);
@@ -68,6 +65,7 @@ const game = (playerGameboardDom, playerGameboard, shipArray) => {
           const registerWinnerEvent = new CustomEvent("registerWinner", { detail: isPlayer1Turn });
           document.dispatchEvent(registerWinnerEvent);
           playerGameboardDom.removeEventListener("click", handleAttack);
+          headerAction.addEventListener("click", gameRestartHandler);
           return;
         }
       }
@@ -85,9 +83,10 @@ const game = (playerGameboardDom, playerGameboard, shipArray) => {
 };
 
 const headerAction = document.querySelector(".header-action-button");
-headerAction.addEventListener("click", (e) => {
+const gameRestartHandler = () => {
   game(player2.dom, player2.gameboard, player2.ships);
-});
+  headerAction.removeEventListener("click", gameRestartHandler);
+};
 
 const player1 = {
   dom: player1gameboardDom,
@@ -103,3 +102,11 @@ const player2 = {
 game(player2.dom, player2.gameboard, player2.ships);
 
 export { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2, placeShip };
+
+// if (playerGameboard[randomNumber].containsShip !== false) {
+//   let target = playerGameboard[randomNumber].coord;
+//   const splitTarget = target.split(".");
+//   const targetArray = [Number(splitTarget[0]), Number(splitTarget[1])];
+//   const newTargetArray = [targetArray[0], targetArray[1] + 1];
+//   const newTarget = newTargetArray[0].toString() + "," + newTargetArray[1].toString();
+// }

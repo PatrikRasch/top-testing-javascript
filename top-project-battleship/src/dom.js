@@ -226,7 +226,6 @@ const orientationDecider = () => {
 const placeShipsPlayer2 = () => {
   shipArrayPlayer2.forEach((ship) => {
     let randomNumber = Math.floor(Math.random() * 10) + "." + Math.floor(Math.random() * 10);
-    // placeShip(ship, player2gameboard, randomNumber, orientationDecider());
     let placedShip = false;
     while (placedShip === false) {
       try {
@@ -277,6 +276,13 @@ const updateShipsLeftDom = (shipsLeftPlayer, shipsLeftPlayerValue) => {
   shipsLeftPlayer.textContent = shipsLeftPlayerValue.value;
 };
 
+player2gameboardDom.addEventListener("checkIfValidAttack", (e) => {
+  if (e.detail.target.classList.contains("impact-img")) {
+    e.detail.isValid = false;
+    playAudio("deny");
+  }
+});
+
 player1gameboardDom.addEventListener("registerHit", (e) => {
   updatePlayerDom(e.detail.target, hitsTakenPlayer1, hitsTakenPlayer1value);
 });
@@ -304,6 +310,7 @@ document.addEventListener("registerWinner", (e) => {
   if (e.detail.value === true) {
     visualiseWinnerGameboardDom(player2gameboardDom, player1gameboardDom);
   }
+  headerAction.addEventListener("click", resetGameHandler);
 });
 
 const visualiseWinnerGameboardDom = (winningPlayerGameboardDom, losingPlayerGameboardDom) => {
@@ -318,66 +325,76 @@ const visualiseWinnerGameboardDom = (winningPlayerGameboardDom, losingPlayerGame
   setTimeout(function () {
     winnerText(losingPlayerGameboardDom, "YOU LOSE", "you-lose-message");
     loserArray.forEach((child) => child.classList.add("lose"));
-    headerAction.textContent = "Play Again?";
+    headerAction.textContent = "Play Again";
   }, 1000);
 };
 
-headerAction.addEventListener("click", (e) => {
-  const gameboard1domArray = Array.from(player1gameboardDom.children);
-  const gameboard1domCloneArray = Array.from(player1gameboardDomClone.children);
-  gameboard1domArray.forEach((element) => {
+const resetGameboardDom = (gameboardDom) => {
+  const gameboardDomArray = Array.from(gameboardDom.children);
+  gameboardDomArray.forEach((element) => {
     element.classList.remove("win", "lose", "shipOnSquare", "ship-hit", "ship-miss");
     if (element.firstChild) element.removeChild(element.firstChild);
   });
-  gameboard1domCloneArray.forEach((element) => {
-    element.classList.remove("win", "shipOnSquare");
-  });
-  const gameboard1removeMessage = player1gameboardDom.querySelector(".you-win-message");
-  player1gameboardDom.removeChild(gameboard1removeMessage);
+};
 
-  player1gameboard.forEach((element) => {
+const resetWinOrLoseMessage = (gameboardDom) => {
+  const gameboardRemoveMessage =
+    gameboardDom.querySelector(".you-lose-message") || gameboardDom.querySelector(".you-win-message");
+  gameboardDom.removeChild(gameboardRemoveMessage);
+};
+
+const resetGameboard = (gameboard) => {
+  gameboard.forEach((element) => {
     element.containsShip = false;
     element.cellHit = false;
   });
+};
 
-  const gameboard2domArray = Array.from(player2gameboardDom.children);
-  gameboard2domArray.forEach((element) => {
-    element.classList.remove("win", "lose", "shipOnSquare", "ship-hit", "ship-miss");
-    if (element.firstChild) element.removeChild(element.firstChild);
-  });
-  const gameboard2removeMessage = player2gameboardDom.querySelector(".you-lose-message");
-  player2gameboardDom.removeChild(gameboard2removeMessage);
-
-  player2gameboard.forEach((element) => {
-    element.containsShip = false;
-    element.cellHit = false;
-  });
-
+const showPlaceShipsModal = () => {
   placeShipsModalBackground.style.opacity = 1;
   placeShipsModalBackground.style.display = "block";
+};
 
-  shipArrayPlayer1.forEach((ship) => {
+const resetShipArray = (shipArray) => {
+  shipArray.forEach((ship) => {
     ship.hits = 0;
     ship.sunk = false;
   });
-  placerShipArrayPlayer1 = [...shipArrayPlayer1];
-  shipArrayPlayer2.forEach((ship) => {
-    ship.hits = 0;
-    ship.sunk = false;
-  });
+  if (shipArray === shipArrayPlayer1) placerShipArrayPlayer1 = [...shipArrayPlayer1];
+};
 
+const resetHitsTaken = (hitsTakenPlayerValue, hitsTakenPlayer) => {
+  hitsTakenPlayerValue.value = 0;
+  hitsTakenPlayer.textContent = hitsTakenPlayerValue.value;
+};
+
+const resetShipsLeft = (shipsLeftPlayerValue, shipsLeftPlayer, shipArray) => {
+  shipsLeftPlayerValue.value = shipArray.length;
+  shipsLeftPlayer.textContent = shipsLeftPlayerValue.value;
+};
+
+const resetGame = () => {
+  resetGameboardDom(player1gameboardDom);
+  resetGameboardDom(player1gameboardDomClone);
+  resetGameboardDom(player2gameboardDom);
+  resetGameboard(player1gameboard);
+  resetGameboard(player2gameboard);
+  resetShipArray(shipArrayPlayer1);
+  resetShipArray(shipArrayPlayer2);
+  resetHitsTaken(hitsTakenPlayer1value, hitsTakenPlayer1);
+  resetHitsTaken(hitsTakenPlayer2value, hitsTakenPlayer2);
+  resetShipsLeft(shipsLeftPlayer1value, shipsLeftPlayer1, shipArrayPlayer1);
+  resetShipsLeft(shipsLeftPlayer2value, shipsLeftPlayer2, shipArrayPlayer2);
+  resetWinOrLoseMessage(player1gameboardDom);
+  resetWinOrLoseMessage(player2gameboardDom);
+  showPlaceShipsModal();
   placeShipsPlayer2();
   markShipsOnGameboard(player2gameboard, player2gameboardDom);
+  headerAction.removeEventListener("click", resetGameHandler);
+};
 
-  hitsTakenPlayer1value.value = 0;
-  hitsTakenPlayer2value.value = 0;
-  hitsTakenPlayer1.textContent = hitsTakenPlayer1value.value;
-  hitsTakenPlayer2.textContent = hitsTakenPlayer2value.value;
-
-  shipsLeftPlayer1value.value = shipArrayPlayer1.length;
-  shipsLeftPlayer1.textContent = shipsLeftPlayer1value.value;
-  shipsLeftPlayer2value.value = shipArrayPlayer2.length;
-  shipsLeftPlayer2.textContent = shipsLeftPlayer2value.value;
-});
+const resetGameHandler = () => {
+  resetGame();
+};
 
 export {};
