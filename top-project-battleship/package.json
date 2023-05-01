@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "homepage": "https://patrikrasch.github.io/top-testing-javascript/top-project-battleships/",
+  "homepage": "https://patrikrasch.github.io/top-testing-javascript/top-project-battleship/",
   "scripts": {
     "deploy": "webpack --config webpack.prod.js && gh-pages -d dist",
     "test": "jest --watch *.js",
