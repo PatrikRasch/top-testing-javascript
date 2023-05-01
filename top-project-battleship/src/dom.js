@@ -68,7 +68,8 @@ const markShipsOnGameboard = (gameboard, gameboardDom) => {
   gameboard.forEach((element) => {
     if (element.containsShip !== false) {
       const domElement = gameboardDom.querySelector(`[data-coord="${element.coord}"]`);
-      domElement.classList.add("shipOnSquare");
+      if (gameboardDom === player2gameboardDom) domElement.classList.add("shipOnSquare", "shipInvisible");
+      else domElement.classList.add("shipOnSquare", "shipVisible");
     }
   });
 };
@@ -113,8 +114,7 @@ const player1gameboardDomClone = player1gameboardDom.cloneNode(true);
 player1gameboardDomClone.classList.add("player1-gameboard-clone");
 placeShipsModal.appendChild(player1gameboardDomClone);
 
-let currentOrientation = "X";
-switchOrientationButton.addEventListener("click", (e) => {
+const currentOrientationHandler = () => {
   currentOrientation = currentOrientation === "X" ? "Y" : "X";
   switchOrientationButton.textContent = `Change orientation: ${currentOrientation}`;
 
@@ -124,6 +124,13 @@ switchOrientationButton.addEventListener("click", (e) => {
   }, 140);
 
   playAudio("swap");
+};
+
+let currentOrientation = "X";
+switchOrientationButton.addEventListener("click", currentOrientationHandler);
+player1gameboardDomClone.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+  currentOrientationHandler();
 });
 
 const cloneCells = player1gameboardDomClone.querySelectorAll(".cell");
@@ -246,9 +253,11 @@ let hitsTakenPlayer2value = { value: 0 };
 
 let shipsLeftPlayer1value = { value: shipArrayPlayer1.length };
 let shipsLeftPlayer2value = { value: shipArrayPlayer2.length };
+const shipsLeftPlayer1initially = [shipsLeftPlayer1value.value];
+const shipsLeftPlayer2initially = [shipsLeftPlayer2value.value];
 
-shipsLeftPlayer1.textContent = shipsLeftPlayer1value.value;
-shipsLeftPlayer2.textContent = shipsLeftPlayer2value.value;
+shipsLeftPlayer1.textContent = `${shipsLeftPlayer1value.value} / ${shipsLeftPlayer1initially}`;
+shipsLeftPlayer2.textContent = `${shipsLeftPlayer2value.value} / ${shipsLeftPlayer2initially}`;
 
 const updatePlayerDom = (cell, hitsTakenPlayer, hitsTakenPlayerValue) => {
   playAudio("fire");
@@ -271,9 +280,9 @@ const updatePlayerDom = (cell, hitsTakenPlayer, hitsTakenPlayerValue) => {
   }, 300);
 };
 
-const updateShipsLeftDom = (shipsLeftPlayer, shipsLeftPlayerValue) => {
+const updateShipsLeftDom = (shipsLeftPlayer, shipsLeftPlayerValue, shipsLeftPlayerInitially) => {
   shipsLeftPlayerValue.value -= 1;
-  shipsLeftPlayer.textContent = shipsLeftPlayerValue.value;
+  shipsLeftPlayer.textContent = `${shipsLeftPlayerValue.value} / ${shipsLeftPlayerInitially}`;
 };
 
 player2gameboardDom.addEventListener("checkIfValidAttack", (e) => {
@@ -291,13 +300,13 @@ player2gameboardDom.addEventListener("registerHit", (e) => {
 });
 
 player1gameboardDom.addEventListener("registerShipSunk", (e) => {
-  updateShipsLeftDom(shipsLeftPlayer1, shipsLeftPlayer1value);
+  updateShipsLeftDom(shipsLeftPlayer1, shipsLeftPlayer1value, shipsLeftPlayer1initially);
   setTimeout(function () {
     playAudio("sink");
   }, 600);
 });
 player2gameboardDom.addEventListener("registerShipSunk", (e) => {
-  updateShipsLeftDom(shipsLeftPlayer2, shipsLeftPlayer2value);
+  updateShipsLeftDom(shipsLeftPlayer2, shipsLeftPlayer2value, shipsLeftPlayer2initially);
   setTimeout(function () {
     playAudio("sink");
   }, 600);
@@ -319,6 +328,7 @@ const visualiseWinnerGameboardDom = (winningPlayerGameboardDom, losingPlayerGame
     winnerArray.forEach((child) => child.classList.add("win"));
     winnerText(winningPlayerGameboardDom, "YOU WIN", "you-win-message");
     headerAction.textContent = "Play Again";
+    headerAction.classList.add("header-action-button-hoverable");
   }, 1000);
 
   const loserArray = Array.from(losingPlayerGameboardDom.children);
@@ -368,12 +378,13 @@ const resetHitsTaken = (hitsTakenPlayerValue, hitsTakenPlayer) => {
   hitsTakenPlayer.textContent = hitsTakenPlayerValue.value;
 };
 
-const resetShipsLeft = (shipsLeftPlayerValue, shipsLeftPlayer, shipArray) => {
+const resetShipsLeft = (shipsLeftPlayer, shipsLeftPlayerValue, shipArray, shipsLeftPlayerInitially) => {
   shipsLeftPlayerValue.value = shipArray.length;
-  shipsLeftPlayer.textContent = shipsLeftPlayerValue.value;
+  shipsLeftPlayer.textContent = `${shipsLeftPlayerValue.value} / ${shipsLeftPlayerInitially}`;
 };
 
 const resetGame = () => {
+  headerAction.classList.remove("header-action-button-hoverable");
   resetGameboardDom(player1gameboardDom);
   resetGameboardDom(player1gameboardDomClone);
   resetGameboardDom(player2gameboardDom);
@@ -383,8 +394,8 @@ const resetGame = () => {
   resetShipArray(shipArrayPlayer2);
   resetHitsTaken(hitsTakenPlayer1value, hitsTakenPlayer1);
   resetHitsTaken(hitsTakenPlayer2value, hitsTakenPlayer2);
-  resetShipsLeft(shipsLeftPlayer1value, shipsLeftPlayer1, shipArrayPlayer1);
-  resetShipsLeft(shipsLeftPlayer2value, shipsLeftPlayer2, shipArrayPlayer2);
+  resetShipsLeft(shipsLeftPlayer1, shipsLeftPlayer1value, shipArrayPlayer1, shipsLeftPlayer1initially);
+  resetShipsLeft(shipsLeftPlayer2, shipsLeftPlayer2value, shipArrayPlayer2, shipsLeftPlayer2initially);
   resetWinOrLoseMessage(player1gameboardDom);
   resetWinOrLoseMessage(player2gameboardDom);
   showPlaceShipsModal();

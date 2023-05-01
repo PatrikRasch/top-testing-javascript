@@ -102,11 +102,3 @@ const player2 = {
 game(player2.dom, player2.gameboard, player2.ships);
 
 export { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2, placeShip };
-
-// if (playerGameboard[randomNumber].containsShip !== false) {
-//   let target = playerGameboard[randomNumber].coord;
-//   const splitTarget = target.split(".");
-//   const targetArray = [Number(splitTarget[0]), Number(splitTarget[1])];
-//   const newTargetArray = [targetArray[0], targetArray[1] + 1];
-//   const newTarget = newTargetArray[0].toString() + "," + newTargetArray[1].toString();
-// }
