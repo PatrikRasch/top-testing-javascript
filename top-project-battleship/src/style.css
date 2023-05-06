@@ -1,3 +1,6 @@
+/* Font: Ariel Bold with letter spacing of 15.9% in Procreate
+(this spacing could be different for you, just double check it by eye and it should be alright) */
+
 body {
   margin: 0;
 }
@@ -58,30 +61,69 @@ body {
   box-shadow: 0px 0px 100px 10px black;
   display: grid;
   justify-items: center;
-  grid-template-rows: 1.4fr 1.4fr 8fr;
+  grid-template-rows: 1.5fr 1.5fr 8fr 2fr;
   gap: 10px;
+}
+
+.introduction-message,
+.place-ship-message,
+.switch-orientation-button,
+.ships-placed {
+  font-family: Arial;
+  font-weight: bold;
+  letter-spacing: 2.5px;
+}
+
+.introduction-message {
+  font-size: 1.2vw;
+  align-self: end;
 }
 
 .place-ship-message {
   display: grid;
-  align-self: end;
-  font-family: Assistant-SemiBold;
-  font-size: 2vw;
+  align-self: center;
+  font-size: 1.5vw;
+  color: white;
+  border: 15px solid rgb(71, 71, 71);
+  background-color: rgb(71, 71, 71);
+  width: 70%;
+  text-align: center;
+  border-radius: 15px;
 }
 
-.switch-orientation-button {
-  font-size: inherit;
-  align-self: center;
-  font-family: Assistant;
-  font-size: 1.3vw;
-  width: 30%;
-  height: 80%;
-  border-radius: 5px;
-  border: none;
+.player1-gameboard-clone {
+  width: 70%;
+  height: 70%;
+  padding-bottom: 10px;
+}
+
+.place-ships-modal-bottom {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: min-content 1fr;
+  width: 80%;
+  justify-items: center;
+  align-items: top;
+}
+
+.switch-orientation-button,
+.ships-placed {
+  height: calc(100% + 20px);
+  text-align: center;
+  font-size: 1.1vw;
+  width: 90%;
   background-color: rgb(152, 201, 200);
+  border-radius: 15px;
   color: white;
   white-space: nowrap;
   transition: transform 0.14s, opacity 0s;
+}
+
+.x-orientation {
+  background-color: red;
+}
+.y-orientation {
+  background-color: rgb(0, 183, 183);
 }
 
 .switch-orientation-button:hover {
@@ -92,11 +134,8 @@ body {
   transform: scale(0.98);
 }
 
-.player1-gameboard-clone {
-  width: 70%;
-  height: 70%;
-  padding-bottom: 10px;
-}
+/* .ships-placed {
+} */
 
 .gameboard-title-row,
 .gameboard-row,

@@ -1,5 +1,16 @@
 import { player1gameboard, player2gameboard, shipArrayPlayer1, shipArrayPlayer2, placeShip } from "./gameplay";
 
+import splash from "./img/water-droplet1.png";
+import explosion from "./img/ship-hit-explosion1.png";
+// import favicon from "./img/warship2.png";
+import cock from "./audio/cock.mp3";
+import deny from "./audio/deny.mp3";
+import fire from "./audio/fire.mp3";
+import hits from "./audio/hits.mp3";
+import miss from "./audio/miss.mp3";
+import sink from "./audio/sink.mp3";
+import swap from "./audio/swap.mp3";
+
 const headerAction = document.querySelector(".header-action-button");
 
 const player1gameboardDom = document.querySelector(".player-gameboard");
@@ -10,9 +21,9 @@ const shipsLeftPlayer2 = document.querySelector(".ships-left-computer-value");
 
 const hitsTakenPlayer1 = document.querySelector(".hits-taken-player-value");
 const hitsTakenPlayer2 = document.querySelector(".hits-taken-computer-value");
-
 const playAudio = (audioFile) => {
-  const chosenTrack = new Audio(`../src/audio/${audioFile}.mp3`);
+  const chosenTrack = new Audio(audioFile);
+  // const chosenTrack = new Audio(`../src/audio/${audioFile}.mp3`);
   if (chosenTrack.src.slice(-8) === "fire.mp3") chosenTrack.volume = 0.6;
   if (chosenTrack.src.slice(-8) === "hits.mp3") chosenTrack.volume = 0.45;
   if (chosenTrack.src.slice(-8) === "deny.mp3") chosenTrack.volume = 0.45;
@@ -29,7 +40,8 @@ const playAudio = (audioFile) => {
 const addImage = (cell, imageName) => {
   const image = document.createElement("img");
   image.classList.add("impact-img");
-  image.src = `../src/img/${imageName}.png`;
+  image.src = imageName;
+  // image.src = `../src/img/${imageName}.png`;
   setTimeout(() => {
     image.style.opacity = "1";
   }, 0);
@@ -80,7 +92,7 @@ const updateShipToBePlacedName = () => {
   if (placerShipArrayPlayer1[0].length === 3) shipToBePlaced = "Cruiser";
   if (placerShipArrayPlayer1[0].length === 2) shipToBePlaced = "Destoyer";
   if (placerShipArrayPlayer1[0].length === 1) shipToBePlaced = "Frigate";
-  placeShipMessage.textContent = `Place the ${shipToBePlaced}`;
+  placeShipMessage.textContent = `PLACE THE ${shipToBePlaced}`.toUpperCase();
 };
 
 headerAction.textContent = "Sink Their Ships";
@@ -99,31 +111,50 @@ const placeShipsModal = document.createElement("div");
 placeShipsModal.classList.add("place-ships-modal");
 placeShipsModalBackground.appendChild(placeShipsModal);
 
+const introductionMessage = document.createElement("div");
+introductionMessage.classList.add("introduction-message");
+introductionMessage.textContent = "START BY PLACING YOUR SHIPS";
+placeShipsModal.appendChild(introductionMessage);
+
 const placeShipMessage = document.createElement("div");
 placeShipMessage.classList.add("place-ship-message");
-placeShipMessage.textContent = "Place the Aircraft Carrier";
+placeShipMessage.textContent = "Place the Aircraft Carrier".toUpperCase();
 placeShipsModal.appendChild(placeShipMessage);
-
-const switchOrientationButton = document.createElement("button");
-switchOrientationButton.classList.add("switch-orientation-button");
-switchOrientationButton.textContent = "Change orientation: X";
-placeShipsModal.appendChild(switchOrientationButton);
 
 // * Gameboard clone on modal
 const player1gameboardDomClone = player1gameboardDom.cloneNode(true);
 player1gameboardDomClone.classList.add("player1-gameboard-clone");
 placeShipsModal.appendChild(player1gameboardDomClone);
 
+const placeShipsModalBottom = document.createElement("div");
+placeShipsModalBottom.classList.add("place-ships-modal-bottom");
+placeShipsModal.appendChild(placeShipsModalBottom);
+
+const switchOrientationButton = document.createElement("div");
+switchOrientationButton.classList.add("switch-orientation-button", "x-orientation");
+switchOrientationButton.textContent = "Change orientation: X".toUpperCase();
+placeShipsModalBottom.appendChild(switchOrientationButton);
+
+const shipsPlaced = document.createElement("div");
+shipsPlaced.classList.add("ships-placed");
+shipsPlaced.textContent = "SHIPS PLACED: ";
+placeShipsModalBottom.appendChild(shipsPlaced);
+
 const currentOrientationHandler = () => {
   currentOrientation = currentOrientation === "X" ? "Y" : "X";
-  switchOrientationButton.textContent = `Change orientation: ${currentOrientation}`;
+  switchOrientationButton.textContent = `Change orientation: ${currentOrientation}`.toUpperCase();
+
+  switchOrientationButton.classList.contains("x-orientation")
+    ? switchOrientationButton.classList.replace("x-orientation", "y-orientation")
+    : switchOrientationButton.classList.replace("y-orientation", "x-orientation");
+  console.log("here");
 
   switchOrientationButton.classList.add("switch-orientation-button-clicked");
   setTimeout(() => {
     switchOrientationButton.classList.remove("switch-orientation-button-clicked");
   }, 140);
 
-  playAudio("swap");
+  playAudio(swap);
 };
 
 let currentOrientation = "X";
@@ -200,7 +231,7 @@ player1gameboardDomClone.addEventListener("mouseout", (e) => {
 });
 
 player1gameboardDomClone.addEventListener("click", (e) => {
-  if (e.target.classList.contains("ship-pre-placement-illegal")) playAudio("deny");
+  if (e.target.classList.contains("ship-pre-placement-illegal")) playAudio(deny);
 
   if (currentOrientation === "X") {
     if (placeShip(placerShipArrayPlayer1[0], player1gameboard, e.target.dataset.coord, "horizontal") === false) {
@@ -212,7 +243,7 @@ player1gameboardDomClone.addEventListener("click", (e) => {
       return false;
     }
   }
-  playAudio("cock");
+  playAudio(cock);
   markShipsOnGameboard(player1gameboard, player1gameboardDomClone);
   markShipsOnGameboard(player1gameboard, player1gameboardDom);
   placerShipArrayPlayer1.shift();
@@ -260,18 +291,18 @@ shipsLeftPlayer1.textContent = `${shipsLeftPlayer1value.value} / ${shipsLeftPlay
 shipsLeftPlayer2.textContent = `${shipsLeftPlayer2value.value} / ${shipsLeftPlayer2initially}`;
 
 const updatePlayerDom = (cell, hitsTakenPlayer, hitsTakenPlayerValue) => {
-  playAudio("fire");
+  playAudio(fire);
   setTimeout(function () {
     if (cell.classList.contains("shipOnSquare") && !cell.classList.contains("ship-hit")) {
       cell.classList.add("ship-hit");
       hitsTakenPlayerValue.value += 1;
       hitsTakenPlayer.textContent = hitsTakenPlayerValue.value;
-      addImage(cell, "ship-hit-explosion1");
-      playAudio("hits");
+      addImage(cell, explosion);
+      playAudio(hits);
     } else {
       cell.classList.add("ship-miss");
-      addImage(cell, "water-droplet1");
-      playAudio("miss");
+      addImage(cell, splash);
+      playAudio(miss);
       animateCell(cell);
       setTimeout(() => {
         cell.classList.remove("cell-shake");
@@ -288,7 +319,7 @@ const updateShipsLeftDom = (shipsLeftPlayer, shipsLeftPlayerValue, shipsLeftPlay
 player2gameboardDom.addEventListener("checkIfValidAttack", (e) => {
   if (e.detail.target.classList.contains("impact-img")) {
     e.detail.isValid = false;
-    playAudio("deny");
+    playAudio(deny);
   }
 });
 
@@ -302,13 +333,13 @@ player2gameboardDom.addEventListener("registerHit", (e) => {
 player1gameboardDom.addEventListener("registerShipSunk", (e) => {
   updateShipsLeftDom(shipsLeftPlayer1, shipsLeftPlayer1value, shipsLeftPlayer1initially);
   setTimeout(function () {
-    playAudio("sink");
+    playAudio(sink);
   }, 600);
 });
 player2gameboardDom.addEventListener("registerShipSunk", (e) => {
   updateShipsLeftDom(shipsLeftPlayer2, shipsLeftPlayer2value, shipsLeftPlayer2initially);
   setTimeout(function () {
-    playAudio("sink");
+    playAudio(sink);
   }, 600);
 });
 
